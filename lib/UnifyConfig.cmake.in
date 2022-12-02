@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include("@CMAKE_INSTALL_PREFIX@/lib/cmake/Unify/UnifyTargets.cmake")
+
+set(UNIFY_LIBRARY unify)
+
+set(Unify_LIBRARIES
+	unify
+)
+
+set(UNIFY_DATA_DIR "@CMAKE_INSTALL_PREFIX@/share/opencog")
+set(UNIFY_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include/")
+set(UNIFY_VERSION "@SEMANTIC_VERSION@")
+set(UNIFY_FOUND 1)
