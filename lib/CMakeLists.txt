@@ -2,10 +2,10 @@
 string(TOUPPER "${CMAKE_BUILD_TYPE}" build_type )
 
 export(EXPORT UnifyTargets
-	FILE "${CMAKE_CURRENT_BINARY_DIR}/unify/UnifyTargets.cmake"
+	FILE "${CMAKE_CURRENT_BINARY_DIR}/Unify/UnifyTargets.cmake"
 )
 
-set(ConfigPackageLocation lib/cmake/unify)
+set(ConfigPackageLocation lib/cmake/Unify)
 
 install(EXPORT UnifyTargets
 	FILE UnifyTargets.cmake
