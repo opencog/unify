@@ -25,7 +25,7 @@ for more information.
 Be sure to install the pre-requisites first!
 Perform the following steps at the shell prompt:
 ```
-    cd uunify
+    cd unify
     mkdir build
     cd build
     cmake ..
