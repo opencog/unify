@@ -22,6 +22,7 @@
  */
 
 #include <opencog/atoms/core/LambdaLink.h>
+#include <opencog/unify/Unify.h>
 
 #include "RuleLink.h"
 
@@ -30,11 +31,33 @@ using namespace opencog;
 RuleLink::RuleLink(const HandleSeq&& oset, Type t)
 	: Link(std::move(oset), t)
 {
+	unifier = nullptr;
 	if (not nameserver().isA(t, RULE_LINK))
 	{
 		const std::string& tname = nameserver().getTypeName(t);
 		throw InvalidParamException(TRACE_INFO,
 			"Expecting an RuleLink, got %s", tname.c_str());
+	}
+
+	init();
+}
+
+RuleLink::~RuleLink()
+{
+	if (unifier) delete unifier;
+}
+
+void RuleLink::init(void)
+{
+	if (3 != _outgoing.size())
+		throw SyntaxException(TRACE_INFO,
+			"Expecting exactly three arguments");
+
+	if (_outgoing[0]->get_type() != LAMBDA_LINK and
+	    _outgoing[1]->get_type() != LAMBDA_LINK)
+	{
+		unifier = new Unify(_outgoing[0], _outgoing[1]);
+		return;
 	}
 }
 
@@ -43,7 +66,22 @@ RuleLink::RuleLink(const HandleSeq&& oset, Type t)
 /// Return a FloatValue scalar.
 ValuePtr RuleLink::execute(AtomSpace* as, bool silent)
 {
+	Unify::SolutionSet result = (*unifier)();
 printf("duuude ehllo world\n");
+
+	for (const auto& part : result)
+	{
+printf("duuude part\n");
+		for (const auto& blk_type : part)
+		{
+printf("duuude mapr %s\n", blk_type.second.handle->to_string().c_str());
+			for (const auto& chandl : blk_type.first)
+			{
+printf("duuude chandle %s\n", chandl.handle->to_string().c_str());
+			}
+		}
+	}
+
 	return Handle();
 }
 

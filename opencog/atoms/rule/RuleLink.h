@@ -31,15 +31,20 @@ namespace opencog
 /** \addtogroup grp_atomspace
  *  @{
  */
+class Unify;
 
 /// The RuleLink performs unification with rewriting,
 ///
 class RuleLink : public Link
 {
+private:
+	void init(void);
+	Unify* unifier;
 public:
 	RuleLink(const HandleSeq&&, Type = RULE_LINK);
 	RuleLink(const RuleLink&) = delete;
 	RuleLink& operator=(const RuleLink&) = delete;
+	virtual ~RuleLink();
 
 	virtual bool is_executable(void) const { return true; }
 
