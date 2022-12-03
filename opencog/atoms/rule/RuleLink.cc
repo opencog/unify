@@ -49,4 +49,9 @@ printf("duuude ehllo world\n");
 
 DEFINE_LINK_FACTORY(RuleLink, RULE_LINK)
 
+void opencog_unify_atoms_init(void)
+{
+   // Force shared lib ctors to run
+};
+
 /* ===================== END OF FILE ===================== */

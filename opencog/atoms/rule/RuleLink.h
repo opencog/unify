@@ -55,4 +55,8 @@ LINK_PTR_DECL(RuleLink)
 /** @}*/
 }
 
+extern "C" {
+void opencog_unify_atoms_init(void);
+};
+
 #endif // _OPENCOG_RULE_LINK_H
