@@ -22,7 +22,9 @@
  */
 
 #include <opencog/atoms/core/LambdaLink.h>
+#include <opencog/atoms/execution/Instantiator.h>
 #include <opencog/unify/Unify.h>
+#include <opencog/util/exceptions.h>
 
 #include "RuleLink.h"
 
@@ -66,23 +68,39 @@ void RuleLink::init(void)
 /// Return a FloatValue scalar.
 ValuePtr RuleLink::execute(AtomSpace* as, bool silent)
 {
+	HandleSeq anseq;
+	Instantiator instator(as);
 	Unify::SolutionSet result = (*unifier)();
-printf("duuude ehllo world\n");
 
+	// I don't really understand what a solution set is.
+	// This is my best guess.
 	for (const auto& part : result)
 	{
-printf("duuude part\n");
+		GroundingMap gnds;
 		for (const auto& blk_type : part)
 		{
-printf("duuude mapr %s\n", blk_type.second.handle->to_string().c_str());
+			Handle var;
+			Handle gnd;
+
+			if (2 != blk_type.first.size())
+				throw RuntimeException(TRACE_INFO, "I don't know what this means");
+
 			for (const auto& chandl : blk_type.first)
 			{
-printf("duuude chandle %s\n", chandl.handle->to_string().c_str());
+				if (chandl.is_variable())
+					var = chandl.handle;
+				else
+					gnd = chandl.handle;
 			}
+
+			gnds.insert({var, gnd});
 		}
+
+		ValuePtr vp = instator.instantiate(_outgoing[2], gnds);
+		anseq.emplace_back(HandleCast(vp));
 	}
 
-	return Handle();
+	return as->add_link(SET_LINK, std::move(anseq));
 }
 
 DEFINE_LINK_FACTORY(RuleLink, RULE_LINK)
