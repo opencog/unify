@@ -41,7 +41,7 @@ public:
 	RuleLink(const RuleLink&) = delete;
 	RuleLink& operator=(const RuleLink&) = delete;
 
-	virtual bool is_executablee(void) { return true; }
+	virtual bool is_executable(void) const { return true; }
 
 	// Return a pointer to the results
 	virtual ValuePtr execute(AtomSpace*, bool);

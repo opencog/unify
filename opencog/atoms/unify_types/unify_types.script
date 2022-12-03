@@ -5,5 +5,4 @@
 //
 // --------------------------------------------------------------
 
-RULE_LINK <- ORDERED_LINK
-
+RULE_LINK <- EXECUTABLE_LINK
