@@ -61,6 +61,11 @@ void RuleLink::init(void)
 		unifier = new Unify(_outgoing[0], _outgoing[1]);
 		return;
 	}
+
+	// Else one of both are lambdas.
+	if (_outgoing[0]->get_type() == LAMBDA_LINK)
+	{
+	}
 }
 
 // ---------------------------------------------------------------
@@ -74,6 +79,10 @@ ValuePtr RuleLink::execute(AtomSpace* as, bool silent)
 
 	// I don't really understand what a solution set is.
 	// This is my best guess.
+// XXX FIXME. OK, this is how you'd do it for the very simplest caes,
+// but the fancy cases are handled by the unifier itself,
+// with the Unfiy::typed_substitutions() and other methods...
+
 	for (const auto& part : result)
 	{
 		GroundingMap gnds;
