@@ -1,0 +1,9 @@
+//
+// Script for automatic "Atom type" generation. For more information,
+// consult the `README.md` file in the AtomSpace opencog/atoms/atom_types
+// directory.
+//
+// --------------------------------------------------------------
+
+RULE_LINK <- ORDERED_LINK
+
