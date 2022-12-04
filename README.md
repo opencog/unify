@@ -55,9 +55,8 @@ After building, you must install Unify
 
 ## Examples
 
-Examples can be found in this repository under
-
-[Unify examples](examples/unify)
+Examples can be found in this repository in the
+[examples directory](examples).
 
 ## More info
 
