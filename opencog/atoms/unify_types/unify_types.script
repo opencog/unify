@@ -5,4 +5,4 @@
 //
 // --------------------------------------------------------------
 
-RULE_LINK <- EXECUTABLE_LINK
+UNIFIER_LINK <- EXECUTABLE_LINK

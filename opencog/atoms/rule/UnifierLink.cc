@@ -1,5 +1,5 @@
 /*
- * RuleLink.cc
+ * UnifierLink.cc
  *
  * Copyright (C) 2015 Linas Vepstas
  *
@@ -26,30 +26,30 @@
 #include <opencog/unify/Unify.h>
 #include <opencog/util/exceptions.h>
 
-#include "RuleLink.h"
+#include "UnifierLink.h"
 
 using namespace opencog;
 
-RuleLink::RuleLink(const HandleSeq&& oset, Type t)
+UnifierLink::UnifierLink(const HandleSeq&& oset, Type t)
 	: Link(std::move(oset), t)
 {
 	unifier = nullptr;
-	if (not nameserver().isA(t, RULE_LINK))
+	if (not nameserver().isA(t, UNIFIER_LINK))
 	{
 		const std::string& tname = nameserver().getTypeName(t);
 		throw InvalidParamException(TRACE_INFO,
-			"Expecting an RuleLink, got %s", tname.c_str());
+			"Expecting an UnifierLink, got %s", tname.c_str());
 	}
 
 	init();
 }
 
-RuleLink::~RuleLink()
+UnifierLink::~UnifierLink()
 {
 	if (unifier) delete unifier;
 }
 
-void RuleLink::init(void)
+void UnifierLink::init(void)
 {
 	if (3 != _outgoing.size())
 		throw SyntaxException(TRACE_INFO,
@@ -71,7 +71,7 @@ void RuleLink::init(void)
 // ---------------------------------------------------------------
 
 /// Return a FloatValue scalar.
-ValuePtr RuleLink::execute(AtomSpace* as, bool silent)
+ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 {
 	HandleSeq anseq;
 	Instantiator instator(as);
@@ -112,7 +112,7 @@ ValuePtr RuleLink::execute(AtomSpace* as, bool silent)
 	return as->add_link(SET_LINK, std::move(anseq));
 }
 
-DEFINE_LINK_FACTORY(RuleLink, RULE_LINK)
+DEFINE_LINK_FACTORY(UnifierLink, UNIFIER_LINK)
 
 void opencog_unify_atoms_init(void)
 {

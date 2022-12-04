@@ -1,5 +1,5 @@
 /*
- * opencog/atoms/rule/RuleLink.h
+ * opencog/atoms/rule/UnifierLink.h
  *
  * Copyright (C) 2015 Linas Vepstas
  * All Rights Reserved
@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _OPENCOG_RULE_LINK_H
-#define _OPENCOG_RULE_LINK_H
+#ifndef _OPENCOG_UNIFIER_LINK_H
+#define _OPENCOG_UNIFIER_LINK_H
 
 #include <opencog/atoms/base/Link.h>
 #include <opencog/atoms/unify_types/atom_types.h>
@@ -33,18 +33,18 @@ namespace opencog
  */
 class Unify;
 
-/// The RuleLink performs unification with rewriting,
+/// The UnifierLink performs unification with rewriting,
 ///
-class RuleLink : public Link
+class UnifierLink : public Link
 {
 private:
 	void init(void);
 	Unify* unifier;
 public:
-	RuleLink(const HandleSeq&&, Type = RULE_LINK);
-	RuleLink(const RuleLink&) = delete;
-	RuleLink& operator=(const RuleLink&) = delete;
-	virtual ~RuleLink();
+	UnifierLink(const HandleSeq&&, Type = UNIFIER_LINK);
+	UnifierLink(const UnifierLink&) = delete;
+	UnifierLink& operator=(const UnifierLink&) = delete;
+	virtual ~UnifierLink();
 
 	virtual bool is_executable(void) const { return true; }
 
@@ -54,8 +54,8 @@ public:
 	static Handle factory(const Handle&);
 };
 
-LINK_PTR_DECL(RuleLink)
-#define createRuleLink CREATE_DECL(RuleLink)
+LINK_PTR_DECL(UnifierLink)
+#define createUnifierLink CREATE_DECL(UnifierLink)
 
 /** @}*/
 }
@@ -64,4 +64,4 @@ extern "C" {
 void opencog_unify_atoms_init(void);
 };
 
-#endif // _OPENCOG_RULE_LINK_H
+#endif // _OPENCOG_UNIFIER_LINK_H

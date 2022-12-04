@@ -3,7 +3,7 @@
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 
 ADD_LIBRARY (unify-rules
-	RuleLink.cc
+	UnifierLink.cc
 )
 
 # Without this, parallel make will race and crap up the generated files.
@@ -21,6 +21,6 @@ INSTALL (TARGETS unify-rules EXPORT AtomSpaceTargets
 )
 
 INSTALL (FILES
-	RuleLink.h
+	UnifierLink.h
 	DESTINATION "include/opencog/atoms/rule"
 )
