@@ -90,7 +90,7 @@
 ; has not been dischaged. It also includes the second assumption of
 ; the rule of elimination, which remains unconnected. The conclusion
 ; must be, of course, the conclusion of the rule of elimination.
-(cog-execute! (Unifier
+(define proof-tree (Unifier
 	(ConclusionOf intro)
 	(PremiseOf elim (Number 0))
 	(Rule
@@ -101,3 +101,5 @@
 			(PremiseOf elim (Number 1)))
 		; The conclusion of the rule of elim is what we conclude.
 		(ConclusionOf elim))))
+
+(cog-execute! proof-tree)
