@@ -46,7 +46,7 @@
 			(TypedVariable (Variable "$B") (Type 'ConceptNode)))
 
 		; Assumptions (list of premises)
-		(And
+		(SequentialAnd
 			(Implication (Variable "$A") (Variable "$B"))
 			(Variable "$A"))
 
@@ -65,3 +65,13 @@
 (cog-execute! (PremiseOf elim (Number 0)))
 (cog-execute! (PremiseOf elim (Number 1)))
 (cog-execute! (ConclusionOf elim))
+
+; ---------------------------------------------------------------
+; This is perhaps silly, but the conclusion of the introduction rule
+; is exactly the same as the first assumption of the elimination rule.
+; So we already know that these will unify. Lets try this.
+
+(cog-execute! (Unifier
+	(cog-execute! (ConclusionOf intro))
+	(cog-execute! (PremiseOf elim (Number 0)))
+	(List (Variable "$A") (Variable "$B"))))
