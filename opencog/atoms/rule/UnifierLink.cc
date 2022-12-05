@@ -103,33 +103,44 @@ ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 
 	// I don't really understand what a solution set is.
 	// This is my best guess.
-// XXX FIXME. OK, this is how you'd do it for the very simplest caes,
-// but the fancy cases are handled by the unifier itself,
-// with the Unfiy::typed_substitutions() and other methods...
+
+	// XXX FIXME, Maybe. This seems to handle all of the cases I've
+	// looked at so far. However, the unifier has all sorts of fancy
+	// reduction code, and I don't understand what it is or why it
+	// is needed. For example, Unfiy::typed_substitutions() and other
+	// methods... What do they do? Do we really need them?
 
 	for (const auto& part : result)
 	{
-		GroundingMap gnds;
+		GroundingMap gndmap;
 		for (const auto& blk_type : part)
 		{
 			Handle var;
-			Handle gnd;
+			HandleSeq gnds;
 
-			if (2 != blk_type.first.size())
-				throw RuntimeException(TRACE_INFO, "I don't know what this means");
-
+			// There may be more than one grounding. This can happen
+			// when the expr is of the form
+			//    `(Foo (Variable "$P") (Bar (Variable "$P")))`
+			// and the first P matches one thing, and the second matches
+			// another and yet they ar both internally consistent matches.
 			for (const auto& chandl : blk_type.first)
 			{
 				if (chandl.is_variable())
 					var = chandl.handle;
 				else
-					gnd = chandl.handle;
+					gnds.push_back(chandl.handle);
 			}
 
-			gnds.insert({var, gnd});
+			if (1 == gnds.size())
+				gndmap.insert({var, gnds[0]});
+			else
+			{
+				Handle gh = as->add_link(CHOICE_LINK, std::move(gnds));
+				gndmap.insert({var, gh});
+			}
 		}
 
-		ValuePtr vp = instator.instantiate(_outgoing[2], gnds);
+		ValuePtr vp = instator.instantiate(_outgoing[2], gndmap);
 		anseq.emplace_back(HandleCast(vp));
 	}
 

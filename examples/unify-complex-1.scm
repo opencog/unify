@@ -65,6 +65,12 @@
 	(Unifier
 		(Lambda LHS_vardecl LHS)
 		(Lambda RHS_vardecl RHS)
-		(List (Concept "I found this:") (Variable "?COLL-6c74a409"))))
+		(List
+			(Ordered (Concept "Var P is: ===--->>>") (Variable "$P"))
+			(Ordered (Concept "Var Q is: ===--->>>") (Variable "$Q"))
+			(Ordered (Concept "Var TyVs is: ===--->>>") (Variable "$TyVs"))
+			(Ordered (Concept "Var A1 is: ===--->>>") (Variable "$A1"))
+			(Ordered (Concept "Var A2 is: ===--->>>") (Variable "$A2"))
+		)))
 
 (cog-execute! joiner)
