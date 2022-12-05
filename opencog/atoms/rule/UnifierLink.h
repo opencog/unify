@@ -39,6 +39,8 @@ class UnifierLink : public Link
 {
 private:
 	void init(void);
+protected:
+	void make_uni(const HandleSeq&);
 	Unify* unifier;
 public:
 	UnifierLink(const HandleSeq&&, Type = UNIFIER_LINK);

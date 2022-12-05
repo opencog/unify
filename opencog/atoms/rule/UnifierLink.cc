@@ -55,38 +55,43 @@ void UnifierLink::init(void)
 		throw SyntaxException(TRACE_INFO,
 			"Expecting exactly three arguments");
 
-	if (_outgoing[0]->get_type() != LAMBDA_LINK and
-	    _outgoing[1]->get_type() != LAMBDA_LINK)
+	make_uni(_outgoing);
+}
+
+void UnifierLink::make_uni(const HandleSeq& oset)
+{
+	if (oset[0]->get_type() != LAMBDA_LINK and
+	    oset[1]->get_type() != LAMBDA_LINK)
 	{
-		unifier = new Unify(_outgoing[0], _outgoing[1]);
+		unifier = new Unify(oset[0], oset[1]);
 		return;
 	}
 
 	static Variables empty;
 
 	// Else one or both are lambdas.
-	if (_outgoing[0]->get_type() == LAMBDA_LINK and
-	    _outgoing[1]->get_type() != LAMBDA_LINK)
+	if (oset[0]->get_type() == LAMBDA_LINK and
+	    oset[1]->get_type() != LAMBDA_LINK)
 	{
-		const LambdaLinkPtr& lhs = LambdaLinkCast(_outgoing[0]);
+		const LambdaLinkPtr& lhs = LambdaLinkCast(oset[0]);
 		unifier = new Unify(
-			lhs->get_body(), _outgoing[1],
+			lhs->get_body(), oset[1],
 			lhs->get_variables(), empty);
 		return;
 	}
 
-	if (_outgoing[0]->get_type() != LAMBDA_LINK and
-	    _outgoing[1]->get_type() == LAMBDA_LINK)
+	if (oset[0]->get_type() != LAMBDA_LINK and
+	    oset[1]->get_type() == LAMBDA_LINK)
 	{
-		const LambdaLinkPtr& rhs = LambdaLinkCast(_outgoing[1]);
+		const LambdaLinkPtr& rhs = LambdaLinkCast(oset[1]);
 		unifier = new Unify(
-			_outgoing[0], rhs->get_body(),
+			oset[0], rhs->get_body(),
 			empty, rhs->get_variables());
 		return;
 	}
 
-	const LambdaLinkPtr& lhs = LambdaLinkCast(_outgoing[0]);
-	const LambdaLinkPtr& rhs = LambdaLinkCast(_outgoing[1]);
+	const LambdaLinkPtr& lhs = LambdaLinkCast(oset[0]);
+	const LambdaLinkPtr& rhs = LambdaLinkCast(oset[1]);
 	unifier = new Unify(
 		lhs->get_body(), rhs->get_body(),
 		lhs->get_variables(), rhs->get_variables());
