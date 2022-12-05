@@ -68,22 +68,28 @@ void UnifierLink::init(void)
 	if (_outgoing[0]->get_type() == LAMBDA_LINK and
 	    _outgoing[1]->get_type() != LAMBDA_LINK)
 	{
-		unifier = new Unify(_outgoing[0], _outgoing[1],
-			LambdaLinkCast(_outgoing[0])->get_variables(), empty);
+		const LambdaLinkPtr& lhs = LambdaLinkCast(_outgoing[0]);
+		unifier = new Unify(
+			lhs->get_body(), _outgoing[1],
+			lhs->get_variables(), empty);
 		return;
 	}
 
 	if (_outgoing[0]->get_type() != LAMBDA_LINK and
 	    _outgoing[1]->get_type() == LAMBDA_LINK)
 	{
-		unifier = new Unify(_outgoing[0], _outgoing[1],
-			empty, LambdaLinkCast(_outgoing[1])->get_variables());
+		const LambdaLinkPtr& rhs = LambdaLinkCast(_outgoing[1]);
+		unifier = new Unify(
+			_outgoing[0], rhs->get_body(),
+			empty, rhs->get_variables());
 		return;
 	}
 
-	unifier = new Unify(_outgoing[0], _outgoing[1],
-		LambdaLinkCast(_outgoing[0])->get_variables(),
-		LambdaLinkCast(_outgoing[1])->get_variables());
+	const LambdaLinkPtr& lhs = LambdaLinkCast(_outgoing[0]);
+	const LambdaLinkPtr& rhs = LambdaLinkCast(_outgoing[1]);
+	unifier = new Unify(
+		lhs->get_body(), rhs->get_body(),
+		lhs->get_variables(), rhs->get_variables());
 }
 
 // ---------------------------------------------------------------

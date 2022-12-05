@@ -44,8 +44,17 @@
 ; expect to have it be unified with `(Concept "Org1-1")`
 (define joiner
 	(Unifier
-		(Lambda (VariableList) LHS)
+		LHS
 		(Lambda RHS_vardecl RHS)
 		(List (Concept "I found this:") (Variable "?COLL-6c74a409"))))
 
 (cog-execute! joiner)
+
+; Same as above, but with an explicitly empty variable declaration
+(define join-alt
+	(Unifier
+		(Lambda (VariableList) LHS)
+		(Lambda RHS_vardecl RHS)
+		(List (Concept "I found this:") (Variable "?COLL-6c74a409"))))
+
+(cog-execute! join-alt)
