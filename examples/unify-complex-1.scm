@@ -1,5 +1,5 @@
 ;
-; unify-complex-1.scm -- A more complex example, with types.
+; unify-complex-1.scm -- Unifier with multi-part matches.
 ;
 ; This example is copied verbatim from
 ; `UnifyUTest::test_unify_complex_1()`

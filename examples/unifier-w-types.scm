@@ -1,5 +1,5 @@
 ;
-; unifier-w-types.scm -- A more complex example, with types.
+; unifier-w-types.scm -- Using the unifier with type constraints.
 ;
 ; This example is copied verbatim from
 ; `UnifyUTest::test_unify_alpha_equivalence()`
