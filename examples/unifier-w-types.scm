@@ -1,11 +1,11 @@
 ;
 ; unifier-w-types.scm -- A more complex example, with types.
 ;
+; This example is copied verbatim from
+; `UnifyUTest::test_unify_alpha_equivalence()`
+;
 (use-modules (opencog) (opencog exec))
 (use-modules (opencog unify))
-
-; Populate the AtomSpace with some data.
-(Inheritance (Concept "A") (Concept "B"))
 
 (define LHS
  	(Exists
@@ -31,7 +31,7 @@
 			 (Variable "?OBJ")
 			 (Variable "?COLL-6c74a409"))))
 
-(define RHS_vardel
+(define RHS_vardecl
 	(TypedVariable
 	  (Variable "?COLL-6c74a409")
 	  (TypeChoice

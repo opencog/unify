@@ -62,10 +62,28 @@ void UnifierLink::init(void)
 		return;
 	}
 
-	// Else one of both are lambdas.
-	if (_outgoing[0]->get_type() == LAMBDA_LINK)
+	static Variables empty;
+
+	// Else one or both are lambdas.
+	if (_outgoing[0]->get_type() == LAMBDA_LINK and
+	    _outgoing[1]->get_type() != LAMBDA_LINK)
 	{
+		unifier = new Unify(_outgoing[0], _outgoing[1],
+			LambdaLinkCast(_outgoing[0])->get_variables(), empty);
+		return;
 	}
+
+	if (_outgoing[0]->get_type() != LAMBDA_LINK and
+	    _outgoing[1]->get_type() == LAMBDA_LINK)
+	{
+		unifier = new Unify(_outgoing[0], _outgoing[1],
+			empty, LambdaLinkCast(_outgoing[1])->get_variables());
+		return;
+	}
+
+	unifier = new Unify(_outgoing[0], _outgoing[1],
+		LambdaLinkCast(_outgoing[0])->get_variables(),
+		LambdaLinkCast(_outgoing[1])->get_variables());
 }
 
 // ---------------------------------------------------------------
