@@ -13,7 +13,7 @@ in what it is they are trying to do.
 To understand the "meta" character here, note that URE rules have the
 general form
 ```
-(Bind
+(Rule
 	(VariableList X ...)
 		(And
 			(Premise A)
@@ -23,11 +23,16 @@ general form
 ```
 Now, consider the need to join the above rule, with another, of the
 same general form:
-`(Bind (VariableList Y...)(And (Premise C) (Premise D) ...) (Conclusion G))`
+`(Rule (VariableList Y...)(And (Premise C) (Premise D) ...) (Conclusion G))`
+
+If it helps, think of these rules as being in "Natural Deduction Style",
+although the presence of the AtomSpace means that these are also kind-of
+like Gentzen-style rules. If you don't know what Natural Deduction and
+Gentzen means, just ignore this comment; it has no real bearing on the
+demos.
 
 Suppose that `(Conclusion F)` can be unified with `(Premise C)`.
 Thus, the URE constructs, on the fly, expressions of the general form of
-
 ```
 (Unifier
 	(Lambda
@@ -36,7 +41,7 @@ Thus, the URE constructs, on the fly, expressions of the general form of
 	(Lambda
 		(VariableList vars Y... that are in C)
 		(Premise C))
-	(Bind
+	(Rule
 		(Varible List X... Y...)
 		(And
 			(Premise A)
@@ -52,3 +57,6 @@ actually possible, and that they work correctly.
 
 * `unifier-w-types.scm` -- Unifier with typed variables.
 * `unify-complex-1.scm` -- A more complex example.
+
+A longer demo, but "simpler" than the above.
+* `unifier-tree.scm` -- Minimal Implication Logic, Natural Deduction Style.

@@ -12,6 +12,7 @@
 ; Finally: run the unifier on the extracted parts.
 ;
 (use-modules (opencog) (opencog exec))
+(use-modules (opencog unify))
 
 ; ---------------------------------------------------------------
 ; Define two rules. These will be the two rules of minimal implication
@@ -52,3 +53,15 @@
 		; Deduction aka conclusion
 		(Variable "$B")))
 
+; ---------------------------------------------------------------
+; Lets dissect these two rules into thier parts, and make sure that
+; the parts are as expected:
+
+(cog-execute! (VardeclOf intro))
+(cog-execute! (PremiseOf intro))
+(cog-execute! (ConclusionOf intro))
+
+(cog-execute! (VardeclOf elim))
+(cog-execute! (PremiseOf elim (Number 0)))
+(cog-execute! (PremiseOf elim (Number 1)))
+(cog-execute! (ConclusionOf elim))
