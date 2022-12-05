@@ -7,6 +7,26 @@
 (use-modules (opencog) (opencog exec))
 (use-modules (opencog unify))
 
+(define RHS
+	(Implication
+		(Variable "$P")
+		(And
+			(Variable "$P")
+			(Variable "$Q"))))
+
+(define RHS_vardecl
+	(VariableList
+		(TypedVariable
+			(Variable "$P")
+			(TypeChoice
+				(Type "PredicateNode")
+				(Type "LambdaLink")))
+		(TypedVariable
+			(Variable "$Q")
+			(TypeChoice
+				(Type "PredicateNode")
+				(Type "LambdaLink")))))
+
 (define LHS
 	(Implication
 		(Lambda
@@ -26,13 +46,6 @@
 					(Unquote (Variable "$TyVs"))
 					(Unquote (Variable "$A2")))))))
 
-(define RHS
-	(Implication
-		(Variable "$P")
-		(And
-			(Variable "$P")
-			(Variable "$Q"))))
-
 (define LHS_vardecl
 	(VariableList
 		(TypedVariable
@@ -43,19 +56,6 @@
 				(Type "VariableList")))
 		(TypedVariable (Variable "$A1") (Type "EvaluationLink"))
 		(TypedVariable (Variable "$A2") (Type "EvaluationLink"))))
-
-(define RHS_vardecl
-	(VariableList
-		(TypedVariable
-			(Variable "$P")
-			(TypeChoice
-				(Type "PredicateNode")
-				(Type "LambdaLink")))
-		(TypedVariable
-			(Variable "$Q")
-			(TypeChoice
-				(Type "PredicateNode")
-				(Type "LambdaLink")))))
 
 
 ; Define an inference rule joiner.
