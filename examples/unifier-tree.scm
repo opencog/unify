@@ -85,4 +85,19 @@
 	(PremiseOf elim (Number 0))
 	(List (Variable "$P") (Variable "$Q"))))
 
-; Now, do the same thing, but this time, build the "full" proof tree.
+; Now, do the same thing, but this time, build the full proof tree.
+; It consists of the assumption of the rule of intro, which clearly
+; has not been dischaged. It also includes the second assumption of
+; the rule of elimination, which remains unconnected. The conclusion
+; must be, of course, the conclusion of the rule of elimination.
+(cog-execute! (Unifier
+	(ConclusionOf intro)
+	(PremiseOf elim (Number 0))
+	(Rule
+		(SequentialAnd
+			; The assumption of the rule of intro has not been discharged.
+			(PremiseOf intro)
+			; The 2nd assumption of the rule of elim has not been discharged.
+			(PremiseOf elim (Number 1)))
+		; The conclusion of the rule of elim is what we conclude.
+		(ConclusionOf elim))))
