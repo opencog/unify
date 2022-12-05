@@ -55,11 +55,21 @@ void UnifierLink::init(void)
 		throw SyntaxException(TRACE_INFO,
 			"Expecting exactly three arguments");
 
-	make_uni(_outgoing);
+	_is_dynamic = true;
+	// If the arguments are static, then we can process them
+	// at constructor time.
+	if (not _outgoing[0]->is_type(EXECUTABLE_LINK) and
+	    not _outgoing[1]->is_type(EXECUTABLE_LINK))
+	{
+		make_uni(_outgoing);
+		_is_dynamic = false;
+	}
 }
 
 void UnifierLink::make_uni(const HandleSeq& oset)
 {
+	if (unifier) delete unifier;
+
 	if (oset[0]->get_type() != LAMBDA_LINK and
 	    oset[1]->get_type() != LAMBDA_LINK)
 	{
@@ -102,6 +112,24 @@ void UnifierLink::make_uni(const HandleSeq& oset)
 /// Return a FloatValue scalar.
 ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 {
+	// If the args are executable, we execute them now,
+	// so as to find out what they are.
+	if (_is_dynamic)
+	{
+		HandleSeq oset;
+		if (_outgoing[0]->is_type(EXECUTABLE_LINK))
+			oset.emplace_back(HandleCast(_outgoing[0]->execute()));
+		else
+			oset.emplace_back(_outgoing[0]);
+
+		if (_outgoing[1]->is_type(EXECUTABLE_LINK))
+			oset.emplace_back(HandleCast(_outgoing[1]->execute()));
+		else
+			oset.emplace_back(_outgoing[1]);
+
+		make_uni(oset);
+	}
+
 	HandleSeq anseq;
 	Instantiator instator(as);
 	Unify::SolutionSet result = (*unifier)();

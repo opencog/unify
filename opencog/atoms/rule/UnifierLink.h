@@ -42,6 +42,7 @@ private:
 protected:
 	void make_uni(const HandleSeq&);
 	Unify* unifier;
+	bool _is_dynamic;
 public:
 	UnifierLink(const HandleSeq&&, Type = UNIFIER_LINK);
 	UnifierLink(const UnifierLink&) = delete;
