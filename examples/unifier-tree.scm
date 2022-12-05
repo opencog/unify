@@ -37,21 +37,27 @@
 		(Implication (Variable "$A") (Variable "$B"))))
 
 ; Next, implication elimination aka Modus Ponens:
+; If P->Q and P is true, then Q.
+; Note that Rules are alpha-converible, so this is *identical*
 ; If A->B and A is true, then B.
+; In the AtomSpace, the first declaration wins; subsequent ones
+; are always alpha-converted to the first. So, to try to lessen
+; confusion, we'll use different variable names from the rule of
+; introduction.
 (define elim
 	(Rule
 		; Typed variables appearing in the terms
 		(VariableList
-			(TypedVariable (Variable "$A") (Type 'ConceptNode))
-			(TypedVariable (Variable "$B") (Type 'ConceptNode)))
+			(TypedVariable (Variable "$P") (Type 'ConceptNode))
+			(TypedVariable (Variable "$Q") (Type 'ConceptNode)))
 
-		; Assumptions (list of premises)
+		; Pssumptions (list of premises)
 		(SequentialAnd
-			(Implication (Variable "$A") (Variable "$B"))
-			(Variable "$A"))
+			(Implication (Variable "$P") (Variable "$Q"))
+			(Variable "$P"))
 
 		; Deduction aka conclusion
-		(Variable "$B")))
+		(Variable "$Q")))
 
 ; ---------------------------------------------------------------
 ; Lets dissect these two rules into thier parts, and make sure that
@@ -70,8 +76,13 @@
 ; This is perhaps silly, but the conclusion of the introduction rule
 ; is exactly the same as the first assumption of the elimination rule.
 ; So we already know that these will unify. Lets try this.
+;
+; What is reported back are the variables that went into this,
+; which is not terribly enlightening.
 
 (cog-execute! (Unifier
-	(cog-execute! (ConclusionOf intro))
-	(cog-execute! (PremiseOf elim (Number 0)))
-	(List (Variable "$A") (Variable "$B"))))
+	(ConclusionOf intro)
+	(PremiseOf elim (Number 0))
+	(List (Variable "$P") (Variable "$Q"))))
+
+; Now, do the same thing, but this time, build the "full" proof tree.
