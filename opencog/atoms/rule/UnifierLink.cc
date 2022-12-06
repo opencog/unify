@@ -33,7 +33,7 @@ using namespace opencog;
 UnifierLink::UnifierLink(const HandleSeq&& oset, Type t)
 	: Link(std::move(oset), t)
 {
-	unifier = nullptr;
+	_unifier = nullptr;
 	if (not nameserver().isA(t, UNIFIER_LINK))
 	{
 		const std::string& tname = nameserver().getTypeName(t);
@@ -46,7 +46,7 @@ UnifierLink::UnifierLink(const HandleSeq&& oset, Type t)
 
 UnifierLink::~UnifierLink()
 {
-	if (unifier) delete unifier;
+	if (_unifier) delete _unifier;
 }
 
 void UnifierLink::init(void)
@@ -68,12 +68,12 @@ void UnifierLink::init(void)
 
 void UnifierLink::make_uni(const HandleSeq& oset)
 {
-	if (unifier) delete unifier;
+	if (_unifier) delete _unifier;
 
 	if (oset[0]->get_type() != LAMBDA_LINK and
 	    oset[1]->get_type() != LAMBDA_LINK)
 	{
-		unifier = new Unify(oset[0], oset[1]);
+		_unifier = new Unify(oset[0], oset[1]);
 		return;
 	}
 
@@ -84,7 +84,7 @@ void UnifierLink::make_uni(const HandleSeq& oset)
 	    oset[1]->get_type() != LAMBDA_LINK)
 	{
 		const LambdaLinkPtr& lhs = LambdaLinkCast(oset[0]);
-		unifier = new Unify(
+		_unifier = new Unify(
 			lhs->get_body(), oset[1],
 			lhs->get_variables(), empty);
 		return;
@@ -94,7 +94,7 @@ void UnifierLink::make_uni(const HandleSeq& oset)
 	    oset[1]->get_type() == LAMBDA_LINK)
 	{
 		const LambdaLinkPtr& rhs = LambdaLinkCast(oset[1]);
-		unifier = new Unify(
+		_unifier = new Unify(
 			oset[0], rhs->get_body(),
 			empty, rhs->get_variables());
 		return;
@@ -102,15 +102,15 @@ void UnifierLink::make_uni(const HandleSeq& oset)
 
 	const LambdaLinkPtr& lhs = LambdaLinkCast(oset[0]);
 	const LambdaLinkPtr& rhs = LambdaLinkCast(oset[1]);
-	unifier = new Unify(
+	_unifier = new Unify(
 		lhs->get_body(), rhs->get_body(),
 		lhs->get_variables(), rhs->get_variables());
 }
 
 // ---------------------------------------------------------------
 
-/// Return a FloatValue scalar.
-ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
+/// Return a list of all of the rewritten targets.
+HandleSeq UnifierLink::rewrite(AtomSpace* as, bool silent)
 {
 	// If the args are executable, we execute them now,
 	// so as to find out what they are.
@@ -132,7 +132,7 @@ ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 
 	HandleSeq anseq;
 	Instantiator instator(as);
-	Unify::SolutionSet result = (*unifier)();
+	Unify::SolutionSet result = (*_unifier)();
 
 	// I don't really understand what a solution set is.
 	// This is my best guess.
@@ -177,10 +177,20 @@ ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 		anseq.emplace_back(HandleCast(vp));
 	}
 
-	return as->add_link(SET_LINK, std::move(anseq));
+	return anseq;
+}
+
+// ---------------------------------------------------------------
+
+/// Return the set of all possible rewrites after unification.
+ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
+{
+	return as->add_link(SET_LINK, rewrite(as, silent));
 }
 
 DEFINE_LINK_FACTORY(UnifierLink, UNIFIER_LINK)
+
+// ---------------------------------------------------------------
 
 void opencog_unify_atoms_init(void)
 {

@@ -40,9 +40,11 @@ class UnifierLink : public Link
 private:
 	void init(void);
 protected:
-	void make_uni(const HandleSeq&);
-	Unify* unifier;
+	Unify* _unifier;
 	bool _is_dynamic;
+
+	void make_uni(const HandleSeq&);
+	HandleSeq rewrite(AtomSpace*, bool);
 public:
 	UnifierLink(const HandleSeq&&, Type = UNIFIER_LINK);
 	UnifierLink(const UnifierLink&) = delete;

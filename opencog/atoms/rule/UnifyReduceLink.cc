@@ -43,7 +43,17 @@ UnifyReduceLink::UnifyReduceLink(const HandleSeq&& oset, Type t)
 /// Return a FloatValue scalar.
 ValuePtr UnifyReduceLink::execute(AtomSpace* as, bool silent)
 {
-	return as->add_link(SET_LINK, std::move(anseq));
+	HandleSeq anseq(rewrite(as, silent);
+	HandleSeq redseq;
+	for (const Handle& h: anseq)
+	{
+		if (h->is_type(EXECUTABLE_LINK))
+			redseq.emplace_back(HandleCast(h->execute()));
+		else
+			redseq.emplace_back(h);
+	}
+
+	return as->add_link(SET_LINK, std::move(redseq));
 }
 
 DEFINE_LINK_FACTORY(UnifyReduceLink, UNIFY_REDUCE_LINK)
