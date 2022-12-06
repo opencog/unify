@@ -6,3 +6,4 @@
 // --------------------------------------------------------------
 
 UNIFIER_LINK <- EXECUTABLE_LINK
+UNIFY_REDUCE_LINK <- UNIFIER_LINK
