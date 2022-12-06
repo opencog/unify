@@ -30,10 +30,10 @@ The rewrite in `R` then only uses the union of the variables in `A`
 and `B`, with all other variables in `R` treaed as constants. This
 is will, in general, differ from the form
 ```
-	(Bind
-		(VariableList vars-in-A vars-in-B)
-		(Identical A B)
-		R)
+   (Bind
+      (VariableList vars-in-A vars-in-B)
+      (Identical A B)
+      R)
 ```
 An explicit example of such a difference is when `(Variable "$X")`
 appears in `vars-in-A` and in `B`, but not in `vars-in-B`. In this
@@ -41,6 +41,25 @@ case, the `IdenticalLink` will treat `X` as being bound in `B`
 (because of the mash-up of variable decls in the `BindLink`) and will
 try to unify it. The `UnifierLink` will keep the variable declarations
 distinct.
+
+This difference makes the `UnifierLink` far more suitable for performing
+the unification and chaining of inference rules, where there may be
+variable name collisions, and explicit call-outs of free and bound
+variables. The last demo on this page provides an example of chaining
+two rules together.
+
+On the other hand, the `BindLink` allows much more complex expressions,
+such as
+```
+   (Bind
+      (VariableList ...)
+      (And
+         (Identical A B)
+         (Identical P Q)
+         (Present S T U)
+         (Absent L M N))
+      R)
+```
 
 
 Demo examples
