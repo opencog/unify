@@ -13,7 +13,7 @@
 
 ; Load the shared lib defining the atoms
 (load-extension
-   (string-append opencog-ext-path-unify "libunify-rules")
+   (string-append opencog-ext-path-unify-atoms "libunify-atoms")
    "opencog_unify_atoms_init")
 
 (load-from-path "opencog/unify/types/unify_types.scm")
