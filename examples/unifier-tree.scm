@@ -1,15 +1,22 @@
 ;
 ; unifier-tree.scm -- Build a small proof-tree, using the unifier.
 ;
-; This is a rather long demo, because its got many parts to it.
+; This is a rather long demo, because it has many parts to it.
 ;
-; First: build two rules. These rules will be "connectable", in
-; that the premise of one can be unified with the conclusion of
-; the other.
+; First: define two rules. These rules will be "connectable" or
+; "chainable", in that the premise of one can be unified with the
+; conclusion of the other.
 ;
-; Next: a demo of extracting the premise and the conclusion.
+; Next: a demo of how to disassemble a given rule into it's parts:
+; the premises and the conclusion.
 ;
-; Finally: run the unifier on the extracted parts.
+; Next: extract the two parts that we might be able to unify:
+; the premise of one rule and the conclusion of the other.
+; Stick them into the unifier, and let it write out a new proof
+; tree, for us, with the two connected parts discharged.
+;
+; The above tree is not in reduced form; so, as the final step,
+; reduce it.
 ;
 (use-modules (opencog) (opencog exec))
 (use-modules (opencog unify))

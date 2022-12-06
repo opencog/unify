@@ -59,4 +59,7 @@ actually possible, and that they work correctly.
 * `unify-complex-1.scm` -- A more complex example.
 
 A longer demo, but "simpler" than the above.
-* `unifier-tree.scm` -- Minimal Implication Logic, Natural Deduction Style.
+* `unifier-tree.scm` -- Create a short proof tree, by chaining together
+   two rules. The rules are from Minimal Implication Logic, written in
+   Natural Deduction Style. Demonstrates how to do a single chaining
+   step.
