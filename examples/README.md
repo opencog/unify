@@ -27,7 +27,7 @@ are then treated as constants:
       R)
 ```
 The rewrite in `R` then only uses the union of the variables in `A`
-and `B`, with all other variables in `R` treaed as constants. This
+and `B`, with all other variables in `R` treated as constants. This
 is will, in general, differ from the form
 ```
    (Bind
