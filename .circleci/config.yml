@@ -390,7 +390,7 @@ workflows:
             - ure
       # spacetime does not actually require unify, but
       # we do this to avoid a less confusing circleci report.
-      - spacetime
+      - spacetime:
           requires:
             - unify
       - pln:
