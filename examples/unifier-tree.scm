@@ -90,7 +90,11 @@
 ; has not been dischaged. It also includes the second assumption of
 ; the rule of elimination, which remains unconnected. The conclusion
 ; must be, of course, the conclusion of the rule of elimination.
-(define proof-tree (Unifier
+;
+; If the unification were to fail, then the empty set would be
+; returned. In this case, it was build not to fail, and to return
+; only one proof-tree.
+(define rule-union (Unifier
 	(ConclusionOf intro)
 	(PremiseOf elim (Number 0))
 	(Rule
@@ -102,4 +106,16 @@
 		; The conclusion of the rule of elim is what we conclude.
 		(ConclusionOf elim))))
 
+; Now actually perform the unification, and get the set of proof-trees.
+(define proof-tree-set (cog-execute! rule-union))
+
+; Argh! The proof-tree-set is a (Set (Rule (Lambdas...))) Yuck. We
+; want the reduced proof tree, with everything plugged through.
+; First, unwrap it by hand...
+(define proof-tree (cog-outgoing-atom proof-tree-set 0))
+
+; And then, finally, reduce it:
 (cog-execute! proof-tree)
+
+; Yayy! That's more like it! A simplified, reduced proof tree; the
+; result of chaining together two rules.
