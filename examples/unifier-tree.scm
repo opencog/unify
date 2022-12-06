@@ -92,6 +92,7 @@
 	(PremiseOf elim (Number 0))
 	(List (Variable "$P") (Variable "$Q"))))
 
+; ---------------------------------------------------------------
 ; Now, do the same thing, but this time, build the full proof tree.
 ; It consists of the assumption of the rule of intro, which clearly
 ; has not been dischaged. It also includes the second assumption of
@@ -126,3 +127,26 @@
 
 ; Yayy! That's more like it! A simplified, reduced proof tree; the
 ; result of chaining together two rules.
+
+; ---------------------------------------------------------------
+; The above had to jump through some hoops to get the reduced result
+; of unification. The UnifyReduceLink combines the two into one.
+; Here it is, exactly the same as the above, except that UnifierLink
+; is replaced by UnifyReduceLink:
+
+(define rule-reduce (UnifyReduce
+	(ConclusionOf intro)
+	(PremiseOf elim (Number 0))
+	(Rule
+		(SequentialAnd
+			(PremiseOf intro)
+			(PremiseOf elim (Number 1)))
+		(ConclusionOf elim))))
+
+; Run it:
+(cog-execute! rule-reduce)
+
+; Ta dah!
+
+; The End. That's all, folks!
+; ---------------------------------------------------------------
