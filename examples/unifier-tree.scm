@@ -67,7 +67,7 @@
 		(Variable "$Q")))
 
 ; ---------------------------------------------------------------
-; Lets dissect these two rules into thier parts, and make sure that
+; Lets dissect these two rules into their parts, and make sure that
 ; the parts are as expected:
 
 (cog-execute! (VardeclOf intro))

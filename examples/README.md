@@ -7,7 +7,7 @@ general form
 ```
 with `A` and `B` being terms with variables, and `R` being a rewrite.
 When executed, the variables apparing in `A` and `B` are aligned and
-unified. If this suceeds (if there are results), then, for each result,
+unified. If this succeeds (if there are results), then, for each result,
 a copy of `R` is generated, plugging in groundings for the variables
 that were unified.
 
@@ -105,7 +105,7 @@ Thus, the URE constructs, on the fly, expressions of the general form of
 		(VariableList vars Y... that are in C)
 		(Premise C))
 	(Rule
-		(Varible List X... Y...)
+		(Variable List X... Y...)
 		(And
 			(Premise A)
 			(Premise B)
