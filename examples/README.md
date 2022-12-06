@@ -1,6 +1,50 @@
 Examples
 --------
+The `UnifierLink` performs term unification with rewriting. It has the
+general form
+```
+   (Unifier A B R)
+```
+with `A` and `B` being terms with variables, and `R` being a rewrite.
+When executed, the variables apparing in `A` and `B` are aligned and
+unified. If this suceeds (if there are results), then, for each result,
+a copy of `R` is generated, plugging in groundings for the variables
+that were unified.
 
+Note that this is almost the same thing as running
+```
+	(Bind (Identical A B) R)
+```
+The primary difference between the `UnifierLink` and the
+`BindLink`-`IdenticalLink` combination is how bound variables are
+handled.  The variables to be unified in `A` and `B` can be declared
+with the `LambdaLink`; any other variables appearing in `A` and `B`
+are then treated as constants:
+```
+   (Unifier
+      (Lambda (VariableList vars-in-A ...) A)
+      (Lambda (VariableList vars-in-B ...) B)
+      R)
+```
+The rewrite in `R` then only uses the union of the variables in `A`
+and `B`, with all other variables in `R` treaed as constants. This
+is will, in general, differ from the form
+```
+	(Bind
+		(VariableList vars-in-A vars-in-B)
+		(Identical A B)
+		R)
+```
+An explicit example of such a difference is when `(Variable "$X")`
+appears in `vars-in-A` and in `B`, but not in `vars-in-B`. In this
+case, the `IdenticalLink` will treat `X` as being bound in `B`
+(because of the mash-up of variable decls in the `BindLink`) and will
+try to unify it. The `UnifierLink` will keep the variable declarations
+distinct.
+
+
+Demo examples
+-------------
 A very simple example, that points out that basic unification can
 also be accomplished with the IdenticalLink.
 
