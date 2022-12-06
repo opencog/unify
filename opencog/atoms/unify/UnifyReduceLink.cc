@@ -22,6 +22,7 @@
  */
 
 #include <opencog/util/exceptions.h>
+#include <opencog/atomspace/AtomSpace.h>
 
 #include "UnifyReduceLink.h"
 
@@ -43,7 +44,7 @@ UnifyReduceLink::UnifyReduceLink(const HandleSeq&& oset, Type t)
 /// Return a FloatValue scalar.
 ValuePtr UnifyReduceLink::execute(AtomSpace* as, bool silent)
 {
-	HandleSeq anseq(rewrite(as, silent);
+	HandleSeq anseq(rewrite(as, silent));
 	HandleSeq redseq;
 	for (const Handle& h: anseq)
 	{
