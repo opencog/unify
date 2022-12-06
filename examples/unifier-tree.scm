@@ -58,7 +58,7 @@
 			(TypedVariable (Variable "$P") (Type 'ConceptNode))
 			(TypedVariable (Variable "$Q") (Type 'ConceptNode)))
 
-		; Pssumptions (list of premises)
+		; Assumptions (list of premises)
 		(SequentialAnd
 			(Implication (Variable "$P") (Variable "$Q"))
 			(Variable "$P"))
