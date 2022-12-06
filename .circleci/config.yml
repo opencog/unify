@@ -388,9 +388,9 @@ workflows:
       - miner:
           requires:
             - ure
+      # spacetime does not actually require unify, but
+      # we do this to avoid a less confusing circleci report.
       - spacetime
-          # spacetime does not actually require unify, but
-          # we do this to avoid a less confusing circleci report.
           requires:
             - unify
       - pln:
