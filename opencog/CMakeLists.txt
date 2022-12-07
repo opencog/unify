@@ -1,3 +1,2 @@
 
 ADD_SUBDIRECTORY (unify)
-ADD_SUBDIRECTORY (atoms)
