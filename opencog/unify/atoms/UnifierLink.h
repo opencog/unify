@@ -1,5 +1,5 @@
 /*
- * opencog/atoms/rule/UnifyReduceLink.h
+ * opencog/unify/atoms/UnifierLink.h
  *
  * Copyright (C) 2015, 2022 Linas Vepstas
  * All Rights Reserved
@@ -20,25 +20,38 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _OPENCOG_UNIFY_REDUCE_LINK_H
-#define _OPENCOG_UNIFY_REDUCE_LINK_H
+#ifndef _OPENCOG_UNIFIER_LINK_H
+#define _OPENCOG_UNIFIER_LINK_H
 
-#include <opencog/atoms/unify/UnifierLink.h>
+#include <opencog/atoms/base/Link.h>
+#include <opencog/unify/types/atom_types.h>
 
 namespace opencog
 {
 /** \addtogroup grp_atomspace
  *  @{
  */
+class Unify;
 
-/// The UnifyReduceLink performs reduction after unification and rewriting.
+/// The UnifierLink performs unification with rewriting.
 ///
-class UnifyReduceLink : public UnifierLink
+class UnifierLink : public Link
 {
+private:
+	void init(void);
+protected:
+	Unify* _unifier;
+	bool _is_dynamic;
+
+	void make_uni(const HandleSeq&);
+	HandleSeq rewrite(AtomSpace*, bool);
 public:
-	UnifyReduceLink(const HandleSeq&&, Type = UNIFY_REDUCE_LINK);
-	UnifyReduceLink(const UnifyReduceLink&) = delete;
-	UnifyReduceLink& operator=(const UnifyReduceLink&) = delete;
+	UnifierLink(const HandleSeq&&, Type = UNIFIER_LINK);
+	UnifierLink(const UnifierLink&) = delete;
+	UnifierLink& operator=(const UnifierLink&) = delete;
+	virtual ~UnifierLink();
+
+	virtual bool is_executable(void) const { return true; }
 
 	// Return a pointer to the results
 	virtual ValuePtr execute(AtomSpace*, bool);
@@ -46,9 +59,14 @@ public:
 	static Handle factory(const Handle&);
 };
 
-LINK_PTR_DECL(UnifyReduceLink)
-#define createUnifyReduceLink CREATE_DECL(UnifyReduceLink)
+LINK_PTR_DECL(UnifierLink)
+#define createUnifierLink CREATE_DECL(UnifierLink)
 
 /** @}*/
 }
-#endif // _OPENCOG_UNIFY_REDUCE_LINK_H
+
+extern "C" {
+void opencog_unify_atoms_init(void);
+};
+
+#endif // _OPENCOG_UNIFIER_LINK_H

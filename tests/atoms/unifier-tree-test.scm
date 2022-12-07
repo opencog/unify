@@ -2,6 +2,9 @@
 ; unifier-tree-test.scm -- Unit test for the unifier-tree.scm demo
 ;
 (use-modules (opencog) (opencog exec))
+
+(add-to-load-path "../..")
+
 (use-modules (opencog unify))
 (use-modules (opencog test-runner))
 
