@@ -28,7 +28,7 @@ are then treated as constants:
 ```
 The rewrite in `R` then only uses the union of the variables in `A`
 and `B`, with all other variables in `R` treated as constants. This
-is will, in general, differ from the form
+will, in general, differ from the form
 ```
    (Bind
       (VariableList vars-in-A vars-in-B)
