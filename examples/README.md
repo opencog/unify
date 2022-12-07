@@ -1,5 +1,10 @@
 Examples
 --------
+Please also refer to the documentation:
+* [UnifierLink](https://wiki.opencog.org/w/UnifierLink)
+* [UnifyReduceLink](https://wiki.opencog.org/w/UnifyReduceLink)
+* [RuleLink](https://wiki.opencog.org/w/RuleLink)
+
 The `UnifierLink` performs term unification with rewriting. It has the
 general form
 ```
