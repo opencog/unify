@@ -24,7 +24,7 @@
 #define _OPENCOG_UNIFIER_LINK_H
 
 #include <opencog/atoms/base/Link.h>
-#include <opencog/atoms/unify_types/atom_types.h>
+#include <opencog/unify/types/atom_types.h>
 
 namespace opencog
 {

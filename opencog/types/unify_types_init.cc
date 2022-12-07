@@ -20,9 +20,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "opencog/atoms/unify_types/atom_types.definitions"
+#include "opencog/types/atom_types.definitions"
 
-#define INHERITANCE_FILE "opencog/atoms/unify_types/atom_types.inheritance"
+#define INHERITANCE_FILE "opencog/types/atom_types.inheritance"
 #define INITNAME unify_types_init
 
 #include <opencog/atoms/atom_types/atom_types.cc>
