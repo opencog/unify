@@ -55,7 +55,7 @@
 (test-begin "rule-reduce")
 
 (define expected
-	(Set
+	(LinkValue
 		(Rule
 			(TypedVariable (Variable "$B") (Type 'ConceptNode))
 			(SequentialAnd

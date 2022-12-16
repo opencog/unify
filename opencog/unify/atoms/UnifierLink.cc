@@ -23,6 +23,7 @@
 
 #include <opencog/atoms/core/LambdaLink.h>
 #include <opencog/atoms/execution/Instantiator.h>
+#include <opencog/atoms/value/LinkValue.h>
 #include <opencog/unify/Unify.h>
 #include <opencog/util/exceptions.h>
 
@@ -185,7 +186,7 @@ HandleSeq UnifierLink::rewrite(AtomSpace* as, bool silent)
 /// Return the set of all possible rewrites after unification.
 ValuePtr UnifierLink::execute(AtomSpace* as, bool silent)
 {
-	return as->add_link(SET_LINK, rewrite(as, silent));
+	return createLinkValue(rewrite(as, silent));
 }
 
 DEFINE_LINK_FACTORY(UnifierLink, UNIFIER_LINK)

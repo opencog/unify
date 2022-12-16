@@ -22,6 +22,7 @@
  */
 
 #include <opencog/util/exceptions.h>
+#include <opencog/atoms/value/LinkValue.h>
 #include <opencog/atomspace/AtomSpace.h>
 
 #include "UnifyReduceLink.h"
@@ -54,7 +55,7 @@ ValuePtr UnifyReduceLink::execute(AtomSpace* as, bool silent)
 			redseq.emplace_back(h);
 	}
 
-	return as->add_link(SET_LINK, std::move(redseq));
+	return createLinkValue(redseq);
 }
 
 DEFINE_LINK_FACTORY(UnifyReduceLink, UNIFY_REDUCE_LINK)
