@@ -11,6 +11,10 @@
 # cogutils already requires 3.12, so may as well ask for that.
 CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 
+IF(CMAKE_VERSION VERSION_GREATER 3.31)
+	CMAKE_POLICY(SET CMP0177 NEW)
+ENDIF(CMAKE_VERSION VERSION_GREATER 3.31)
+
 PROJECT(unify)
 
 # ----------------------------------------------------------
