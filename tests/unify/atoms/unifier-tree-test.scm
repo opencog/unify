@@ -63,6 +63,7 @@
 				(Variable "$B"))
 			(Variable "$B"))))
 
+(format #t "Reduction gives ~A\n" (cog-execute! rule-reduce))
 (test-assert "minimal-implication"
 	(equal? expected (cog-execute! rule-reduce)))
 

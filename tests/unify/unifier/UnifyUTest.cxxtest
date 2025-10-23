@@ -899,7 +899,7 @@ void UnifyUTest::test_unify_alpha_equivalence()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(ExistsLink"
+		_eval.eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"?MEMBER\")"
 		             "    (TypeChoice"
@@ -915,7 +915,7 @@ void UnifyUTest::test_unify_alpha_equivalence()
 		             ")");
 
 	Handle rhs =
-        _eval.eval_h("(ExistsLink"
+        _eval.eval_h("(LambdaLink"
                      "  (TypedVariableLink"
                      "    (VariableNode \"?OBJ\")"
                      "    (TypeChoice"
