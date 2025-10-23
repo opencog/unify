@@ -92,10 +92,9 @@ include(Summary)
 # Check for boost. We need dynamic-linked, threaded libs by default.
 SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREADED ON)
-SET(MIN_BOOST 1.46)
 
 # Required boost packages
-FIND_PACKAGE(Boost ${MIN_BOOST} REQUIRED)
+FIND_PACKAGE(Boost CONFIG)
 
 IF(Boost_FOUND)
 	SET(Boost_FOUND_SAVE 1)
