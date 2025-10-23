@@ -25,7 +25,7 @@
 
 #include "Unify.h"
 
-#include <boost/algorithm/cxx11/any_of.hpp>
+#include <algorithm>
 
 #include <opencog/util/algorithm.h>
 #include <opencog/util/Logger.h>
@@ -380,9 +380,8 @@ bool Unify::has_cycle(const Block& blk)
 
 bool Unify::has_cycle(const HandleMultimap& vg)
 {
-	using boost::algorithm::any_of;
 	HandleMultimap cvg = closure(vg);
-	return any_of(cvg, [](const HandleMultimap::value_type& vvs) {
+	return std::any_of(cvg.begin(), cvg.end(), [](const HandleMultimap::value_type& vvs) {
 			return contains(vvs.second, vvs.first); });
 }
 
