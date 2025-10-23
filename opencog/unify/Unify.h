@@ -26,8 +26,6 @@
 #ifndef _OPENCOG_UNIFY_UTILS_H
 #define _OPENCOG_UNIFY_UTILS_H
 
-#include <boost/operators.hpp>
-
 #include <opencog/util/empty_string.h>
 #include <opencog/atoms/atom_types/atom_types.h>
 #include <opencog/atoms/base/Handle.h>
@@ -49,7 +47,7 @@ public:
 	// the Context isn't necessarily equal but where the 2 handles
 	// (besides being equal) have the same quotation and same
 	// (free inter shadow) variables.
-	struct CHandle : public boost::totally_ordered<CHandle>
+	struct CHandle
 	{
 		CHandle(const Handle& handle, const Context& context=Context());
 
@@ -119,6 +117,10 @@ public:
 		 */
 		bool operator==(const CHandle& other) const;
 		bool operator<(const CHandle& other) const;
+		bool operator!=(const CHandle& other) const { return not operator==(other); }
+		bool operator<=(const CHandle& other) const { return operator<(other) or operator==(other); }
+		bool operator>(const CHandle& other) const { return not operator<=(other); }
+		bool operator>=(const CHandle& other) const { return not operator<(other); }
 
 		/**
 		 * Cast operators
