@@ -54,6 +54,7 @@ public:
 	UnifyUTest() : _as(createAtomSpace()), _eval(_as)
 	{
 		logger().set_level(Logger::INFO);
+		// logger().set_level(Logger::DEBUG);
 		logger().set_print_to_stdout_flag(true);
 		logger().set_timestamp_flag(false);
 
@@ -966,16 +967,16 @@ void UnifyUTest::test_substitute()
 {
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
-	// Test simple BindLink
+	// Test simple QueryLink
 	Handle X = an(VARIABLE_NODE, "$X"),
 		Y = an(VARIABLE_NODE, "$Y"),
 		CT = an(TYPE_NODE, "ConceptNode"),
 		Y_vardecl = al(TYPED_VARIABLE_LINK, Y, CT),
-		hbl = al(BIND_LINK, al(AND_LINK, X), al(OR_LINK, X)),
-		expected = al(BIND_LINK, Y_vardecl,
+		hbl = al(QUERY_LINK, al(AND_LINK, X), al(OR_LINK, X)),
+		expected = al(QUERY_LINK, Y_vardecl,
 		              al(AND_LINK, Y), al(OR_LINK, Y));
 
-	BindLinkPtr bl(BindLinkCast(hbl));
+	QueryLinkPtr bl(QueryLinkCast(hbl));
 
 	Handle result = _as->add_atom(Unify::substitute(bl, {{X, Y}}, Y_vardecl));
 
@@ -2119,7 +2120,7 @@ void UnifyUTest::test_unify_complex_11()
 
 	// Hypergraph to substitute after unification
 	Handle bl =
-		_eval.eval_h("(BindLink"
+		_eval.eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (TypedVariableLink"
 		             "      (VariableNode \"$g\")"
@@ -2346,10 +2347,10 @@ void UnifyUTest::test_unify_complex_11()
 	TS_ASSERT(tss_content_eq(ts_result, ts_expected));
 
 	// Test substitution itself
-	BindLinkPtr blptr = BindLinkCast(bl);
+	QueryLinkPtr blptr = QueryLinkCast(bl);
 	Handle sub_result = Unify::substitute(blptr, *ts_result.begin());
 	Handle sub_expected =
-		_eval.eval_h("(BindLink"
+		_eval.eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (VariableNode \"$shapat-0\")"
 		             "    (TypedVariableLink"
@@ -2489,7 +2490,7 @@ void UnifyUTest::test_unify_complex_12()
 
 	// Hypergraph to substitute after unification
 	Handle bl =
-		_eval.eval_h("(BindLink"
+		_eval.eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (TypedVariableLink"
 		             "      (VariableNode \"$g\")"
@@ -2695,10 +2696,10 @@ void UnifyUTest::test_unify_complex_12()
 	TS_ASSERT(tss_content_eq(ts_result, ts_expected));
 
 	// Test substitution itself
-	BindLinkPtr blptr = BindLinkCast(bl);
+	QueryLinkPtr blptr = QueryLinkCast(bl);
 	Handle sub_result = Unify::substitute(blptr, *ts_result.begin());
 	Handle sub_expected =
-		_eval.eval_h("(BindLink"
+		_eval.eval_h("(QueryLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$f\")"
 		             "    (TypeNode \"LambdaLink\")"
