@@ -402,7 +402,7 @@ HandleMultimap Unify::closure_step(const HandleMultimap& vg)
 	return nvg;
 }
 
-Handle Unify::substitute(BindLinkPtr bl, const TypedSubstitution& ts,
+Handle Unify::substitute(QueryLinkPtr bl, const TypedSubstitution& ts,
                          const AtomSpace* queried_as)
 {
 	// TODO: make sure that ts.second contains the declaration of all
@@ -416,7 +416,7 @@ static Handle make_vardecl(const Handle& h)
 	return Handle(createVariableSet(HandleSeq(vars.begin(), vars.end())));
 }
 
-Handle Unify::substitute(BindLinkPtr bl, const HandleMap& var2val,
+Handle Unify::substitute(QueryLinkPtr bl, const HandleMap& var2val,
                          Handle vardecl, const AtomSpace* queried_as)
 {
 	// Perform substitution over the existing variable declaration, if
@@ -436,7 +436,7 @@ Handle Unify::substitute(BindLinkPtr bl, const HandleMap& var2val,
 	// Turn the map into a vector of new variable names/values
 	HandleSeq values = variables.make_sequence(var2val);
 
-	// Substituted BindLink outgoings
+	// Substituted QueryLink outgoings
 	HandleSeq hs;
 
 	// Perform substitution over the pattern term, then remove
@@ -468,7 +468,7 @@ Handle Unify::substitute(BindLinkPtr bl, const HandleMap& var2val,
 	if (vardecl)
 		hs.insert(hs.begin(), vardecl);
 
-	// Create the substituted BindLink
+	// Create the substituted QueryLink
 	return createLink(std::move(hs), bl->get_type());
 }
 
