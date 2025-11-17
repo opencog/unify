@@ -39,7 +39,6 @@ class UnifyGlobUTest :  public CxxTest::TestSuite
 {
 private:
 	AtomSpacePtr _asp = createAtomSpace();
-	SchemeEval _eval;
 	// Note: GlobNodes are in uppercase and
 	// variables are in lower case.
 	Handle X, Y, Z, U, x, y, XY, XYZ, A, B, C, AB, ABC, ABx, YBC,
@@ -47,7 +46,7 @@ private:
 	Context::VariablesStack X_varstack;
 
 public:
-	UnifyGlobUTest() : _eval(_asp)
+	UnifyGlobUTest()
 	{
 		logger().set_level(Logger::DEBUG);
 		logger().set_print_to_stdout_flag(true);

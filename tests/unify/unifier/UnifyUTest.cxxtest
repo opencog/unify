@@ -39,7 +39,7 @@ class UnifyUTest :  public CxxTest::TestSuite
 {
 private:
 	AtomSpacePtr _as;
-	SchemeEval _eval;
+	SchemeEval *_eval;
 	Handle X, Y, Z, W, V, A, B,
 		InhAB, InhXB, InhAY, InhXY, InhAZ, InhAW, InhAV,
 		AndAA, AndAB, AndAY, AndXB, AndXY,
@@ -51,12 +51,14 @@ private:
 	Context::VariablesStack X_varstack;
 
 public:
-	UnifyUTest() : _as(createAtomSpace()), _eval(_as)
+	UnifyUTest() : _as(createAtomSpace())
 	{
 		logger().set_level(Logger::INFO);
 		// logger().set_level(Logger::DEBUG);
 		logger().set_print_to_stdout_flag(true);
 		logger().set_timestamp_flag(false);
+
+		_eval = SchemeEval::get_scheme_evaluator(_as);
 
 		X = an(VARIABLE_NODE, "$X");
 		Y = an(VARIABLE_NODE, "$Y");
@@ -184,14 +186,14 @@ void UnifyUTest::test_type_intersection()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$A1\"))))");
 	Handle rhs =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -237,12 +239,12 @@ void UnifyUTest::test_join_2()
 {
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
-	Handle P = _eval.eval_h("(VariableNode \"$P\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs\")");
-	Handle A1 = _eval.eval_h("(VariableNode \"$A1\")");
+	Handle P = _eval->eval_h("(VariableNode \"$P\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs\")");
+	Handle A1 = _eval->eval_h("(VariableNode \"$A1\")");
 
 	Handle implicant =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -253,7 +255,7 @@ void UnifyUTest::test_join_2()
 		             "      (ConceptNode \"treatment-1\"))))");
 
 	Handle quoted_implicant =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
@@ -261,12 +263,12 @@ void UnifyUTest::test_join_2()
 		             "      (VariableNode \"$A1\"))))");
 
 	Handle implicant_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle implicant_body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -304,14 +306,14 @@ void UnifyUTest::test_join_3()
 {
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
-	Handle P = _eval.eval_h("(VariableNode \"$P\")");
-	Handle Q = _eval.eval_h("(VariableNode \"$Q\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs\")");
-	Handle A1 = _eval.eval_h("(VariableNode \"$A1\")");
-	Handle A2 = _eval.eval_h("(VariableNode \"$A2\")");
+	Handle P = _eval->eval_h("(VariableNode \"$P\")");
+	Handle Q = _eval->eval_h("(VariableNode \"$Q\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs\")");
+	Handle A1 = _eval->eval_h("(VariableNode \"$A1\")");
+	Handle A2 = _eval->eval_h("(VariableNode \"$A2\")");
 
 	Handle implicant =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -322,7 +324,7 @@ void UnifyUTest::test_join_3()
 		             "      (ConceptNode \"treatment-1\"))))");
 
 	Handle quoted_LA1 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
@@ -330,7 +332,7 @@ void UnifyUTest::test_join_3()
 		             "      (VariableNode \"$A1\"))))");
 
 	Handle quoted_LA2 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
@@ -338,12 +340,12 @@ void UnifyUTest::test_join_3()
 		             "      (VariableNode \"$A2\"))))");
 
 	Handle implicant_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle implicant_body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -900,7 +902,7 @@ void UnifyUTest::test_unify_alpha_equivalence()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"?MEMBER\")"
 		             "    (TypeChoice"
@@ -916,7 +918,7 @@ void UnifyUTest::test_unify_alpha_equivalence()
 		             ")");
 
 	Handle rhs =
-        _eval.eval_h("(LambdaLink"
+        _eval->eval_h("(LambdaLink"
                      "  (TypedVariableLink"
                      "    (VariableNode \"?OBJ\")"
                      "    (TypeChoice"
@@ -934,7 +936,7 @@ void UnifyUTest::test_unify_alpha_equivalence()
 	Handle lhs_vardecl;
 
 	Handle rhs_vardecl =
-        _eval.eval_h("(TypedVariableLink"
+        _eval->eval_h("(TypedVariableLink"
                      "  (VariableNode \"?COLL-6c74a409\")"
                      "  (TypeChoice"
                      "    (TypeNode \"ConceptNode\")"
@@ -993,7 +995,7 @@ void UnifyUTest::test_unify_complex_1()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(ImplicationLink"
+		_eval->eval_h("(ImplicationLink"
 		             "  (LambdaLink"
 		             "    (TypedVariableLink"
 		             "      (VariableNode \"$X\")"
@@ -1017,13 +1019,13 @@ void UnifyUTest::test_unify_complex_1()
 		             "        (UnquoteLink"
 		             "          (VariableNode \"$A2\"))))))");
 	Handle rhs =
-		_eval.eval_h("(ImplicationLink"
+		_eval->eval_h("(ImplicationLink"
 		             "   (VariableNode \"$P\")"
 		             "   (And"
 		             "      (VariableNode \"$P\")"
 		             "      (VariableNode \"$Q\")))");
 	Handle lhs_vardecl =
-		_eval.eval_h("(VariableList"
+		_eval->eval_h("(VariableList"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$TyVs\")"
 		             "    (TypeChoice"
@@ -1037,7 +1039,7 @@ void UnifyUTest::test_unify_complex_1()
 		             "    (VariableNode \"$A2\")"
 		             "    (TypeNode \"EvaluationLink\")))");
 	Handle rhs_vardecl =
-		_eval.eval_h("(VariableList"
+		_eval->eval_h("(VariableList"
 		             "   (TypedVariableLink"
 		             "      (VariableNode \"$P\")"
 		             "      (TypeChoice"
@@ -1049,14 +1051,14 @@ void UnifyUTest::test_unify_complex_1()
 		             "         (TypeNode \"PredicateNode\")"
 		             "         (TypeNode \"LambdaLink\")))))");
 
-	Handle P = _eval.eval_h("(VariableNode \"$P\")");
-	Handle Q = _eval.eval_h("(VariableNode \"$Q\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs\")");
-	Handle A1 = _eval.eval_h("(VariableNode \"$A1\")");
-	Handle A2 = _eval.eval_h("(VariableNode \"$A2\")");
+	Handle P = _eval->eval_h("(VariableNode \"$P\")");
+	Handle Q = _eval->eval_h("(VariableNode \"$Q\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs\")");
+	Handle A1 = _eval->eval_h("(VariableNode \"$A1\")");
+	Handle A2 = _eval->eval_h("(VariableNode \"$A2\")");
 
 	Handle implicant =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -1067,7 +1069,7 @@ void UnifyUTest::test_unify_complex_1()
 		             "      (ConceptNode \"treatment-1\"))))");
 
 	Handle quoted_LA1 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
@@ -1075,7 +1077,7 @@ void UnifyUTest::test_unify_complex_1()
 		             "      (VariableNode \"$A1\"))))");
 
 	Handle quoted_LA2 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs\"))"
@@ -1083,12 +1085,12 @@ void UnifyUTest::test_unify_complex_1()
 		             "      (VariableNode \"$A2\"))))");
 
 	Handle implicant_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle implicant_body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -1124,23 +1126,23 @@ void UnifyUTest::test_unify_complex_1()
 
 	TS_ASSERT_EQUALS(result, expected);
 
-	Handle A1_vardecl = _eval.eval_h("(TypedVariableLink"
+	Handle A1_vardecl = _eval->eval_h("(TypedVariableLink"
 	                                 "  (VariableNode \"$A1\")"
 	                                 "  (TypeNode \"EvaluationLink\"))");
 
-	Handle A2_vardecl = _eval.eval_h("(TypedVariableLink"
+	Handle A2_vardecl = _eval->eval_h("(TypedVariableLink"
 	                                 "  (VariableNode \"$A2\")"
 	                                 "  (TypeNode \"EvaluationLink\"))");
 
 	Handle consumed_LA1 =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
 		             "  (VariableNode \"$A1\"))");
 
 	Handle consumed_LA2 =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -1173,7 +1175,7 @@ void UnifyUTest::test_unify_complex_2()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(RuleLink"
+		_eval->eval_h("(RuleLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -1185,7 +1187,7 @@ void UnifyUTest::test_unify_complex_2()
 		             "      (ConceptNode \"compound-A\"))))");
 
 	Handle rhs =
-		_eval.eval_h("(RuleLink"
+		_eval->eval_h("(RuleLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -1207,17 +1209,17 @@ void UnifyUTest::test_unify_complex_2()
 		             "      (ConceptNode \"compound-A\"))))");
 
 	Handle lhs_vardecl =
-		_eval.eval_h("(VariableNode \"$P-55ebe96e\")");
+		_eval->eval_h("(VariableNode \"$P-55ebe96e\")");
 
 	Handle rhs_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$Y-6f50cc6a\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
-	Handle P = _eval.eval_h("(VariableNode \"$P-55ebe96e\")");
+	Handle P = _eval->eval_h("(VariableNode \"$P-55ebe96e\")");
 
 	Handle conjunction =
-		_eval.eval_h("(AndLink"
+		_eval->eval_h("(AndLink"
 		             "  (EvaluationLink"
 		             "    (PredicateNode \"contain\")"
 		             "    (ListLink"
@@ -1244,7 +1246,7 @@ void UnifyUTest::test_unify_complex_2()
 
 	TS_ASSERT_EQUALS(result, expected);
 
-	Handle ts_vardecl = _eval.eval_h("(TypedVariableLink"
+	Handle ts_vardecl = _eval->eval_h("(TypedVariableLink"
 	                                 "  (VariableNode \"$Y-6f50cc6a\")"
 	                                 "  (TypeNode \"ConceptNode\"))");
 
@@ -1270,7 +1272,7 @@ void UnifyUTest::test_unify_complex_3()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle lhs =
-		_eval.eval_h("(ImplicationLink"
+		_eval->eval_h("(ImplicationLink"
 		             "  (QuoteLink"
 		             "    (LambdaLink"
 		             "      (UnquoteLink"
@@ -1288,7 +1290,7 @@ void UnifyUTest::test_unify_complex_3()
 		             "        (ConceptNode \"compound-A\")))))");
 
 	Handle rhs =
-		_eval.eval_h("(ImplicationLink"
+		_eval->eval_h("(ImplicationLink"
 		             "  (QuoteLink"
 		             "    (LambdaLink"
 		             "      (UnquoteLink"
@@ -1303,7 +1305,7 @@ void UnifyUTest::test_unify_complex_3()
 		             "        (VariableNode \"$Q-344be2a0\")))))");
 
 	Handle lhs_vardecl =
-		_eval.eval_h("(VariableList"
+		_eval->eval_h("(VariableList"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$TyVs-3753c5dc\")"
 		             "    (TypeChoice"
@@ -1312,7 +1314,7 @@ void UnifyUTest::test_unify_complex_3()
 		             "  (VariableNode \"$Q-79152fc8\"))");
 
 	Handle rhs_vardecl =
-		_eval.eval_h("(VariableList"
+		_eval->eval_h("(VariableList"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$TyVs-7b18f3dc\")"
 		             "    (TypeChoice"
@@ -1321,19 +1323,19 @@ void UnifyUTest::test_unify_complex_3()
 		             "  (VariableNode \"$P-60bdbde3\")"
 		             "  (VariableNode \"$Q-344be2a0\"))");
 
-	Handle TyVs1 = _eval.eval_h("(VariableNode \"$TyVs-3753c5dc\")");
-	Handle TyVs2 = _eval.eval_h("(VariableNode \"$TyVs-7b18f3dc\")");
-	Handle Q1 = _eval.eval_h("(VariableNode \"$Q-79152fc8\")");
-	Handle Q2 = _eval.eval_h("(VariableNode \"$Q-344be2a0\")");
-	Handle P =_eval.eval_h("(VariableNode \"$P-60bdbde3\")");
+	Handle TyVs1 = _eval->eval_h("(VariableNode \"$TyVs-3753c5dc\")");
+	Handle TyVs2 = _eval->eval_h("(VariableNode \"$TyVs-7b18f3dc\")");
+	Handle Q1 = _eval->eval_h("(VariableNode \"$Q-79152fc8\")");
+	Handle Q2 = _eval->eval_h("(VariableNode \"$Q-344be2a0\")");
+	Handle P =_eval->eval_h("(VariableNode \"$P-60bdbde3\")");
 
 	Handle vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle implicant_body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -1361,7 +1363,7 @@ void UnifyUTest::test_unify_complex_4()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	// Very similar to test_unify_complex_1() but for some reason doesn't work.
-	Handle target = _eval.eval_h(
+	Handle target = _eval->eval_h(
 		"(ImplicationLink"
 		"  (LambdaLink"
 		"    (TypedVariableLink"
@@ -1400,7 +1402,7 @@ void UnifyUTest::test_unify_complex_4()
 		"  )"
 		")"
 		);
-	Handle alpha_pat = _eval.eval_h(
+	Handle alpha_pat = _eval->eval_h(
 		"(ImplicationLink"
 		"  (VariableNode \"$P-10ea3e30\")"
 		"  (AndLink"
@@ -1409,7 +1411,7 @@ void UnifyUTest::test_unify_complex_4()
 		"  )"
 		")"
 		);
-	Handle vardecl = _eval.eval_h(
+	Handle vardecl = _eval->eval_h(
 		"(VariableList"
 		"  (TypedVariableLink"
 		"    (VariableNode \"$TyVs-5476a9b9\")"
@@ -1429,7 +1431,7 @@ void UnifyUTest::test_unify_complex_4()
 		"  )"
 		")"
 		);
-	Handle alpha_vardecl = _eval.eval_h(
+	Handle alpha_vardecl = _eval->eval_h(
 		"(VariableList"
 		"  (TypedVariableLink"
 		"    (VariableNode \"$P-10ea3e30\")"
@@ -1448,14 +1450,14 @@ void UnifyUTest::test_unify_complex_4()
 		")"
 		);
 
-	Handle P = _eval.eval_h("(VariableNode \"$P-10ea3e30\")");
-	Handle Q = _eval.eval_h("(VariableNode \"$Q-78f01c2d\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs-5476a9b9\")");
-	Handle A1 = _eval.eval_h("(VariableNode \"$A1-7235efc6\")");
-	Handle A2 = _eval.eval_h("(VariableNode \"$A2-1ac8e4a2\")");
+	Handle P = _eval->eval_h("(VariableNode \"$P-10ea3e30\")");
+	Handle Q = _eval->eval_h("(VariableNode \"$Q-78f01c2d\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs-5476a9b9\")");
+	Handle A1 = _eval->eval_h("(VariableNode \"$A1-7235efc6\")");
+	Handle A2 = _eval->eval_h("(VariableNode \"$A2-1ac8e4a2\")");
 
 	Handle implicant =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\"))"
@@ -1466,7 +1468,7 @@ void UnifyUTest::test_unify_complex_4()
 		             "      (ConceptNode \"treatment-1\"))))");
 
 	Handle quoted_LA1 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs-5476a9b9\"))"
@@ -1474,7 +1476,7 @@ void UnifyUTest::test_unify_complex_4()
 		             "      (VariableNode \"$A1-7235efc6\"))))");
 
 	Handle quoted_LA2 =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$TyVs-5476a9b9\"))"
@@ -1482,12 +1484,12 @@ void UnifyUTest::test_unify_complex_4()
 		             "      (VariableNode \"$A2-1ac8e4a2\"))))");
 
 	Handle implicant_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle implicant_body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -1529,7 +1531,7 @@ void UnifyUTest::test_unify_complex_5()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-        _eval.eval_h("(LambdaLink"
+        _eval->eval_h("(LambdaLink"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$X\")"
                      "    (TypeNode \"ConceptNode\")"
@@ -1538,7 +1540,7 @@ void UnifyUTest::test_unify_complex_5()
                      ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(QuoteLink"
+        _eval->eval_h("(QuoteLink"
                      "  (LambdaLink"
                      "    (UnquoteLink"
                      "      (VariableNode \"$TyVs-3e93b595\")"
@@ -1550,10 +1552,10 @@ void UnifyUTest::test_unify_complex_5()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableNode \"$Q-496643b4\")");
+        _eval->eval_h("(VariableNode \"$Q-496643b4\")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$TyVs-3e93b595\")"
                      "    (TypeChoice"
@@ -1568,17 +1570,17 @@ void UnifyUTest::test_unify_complex_5()
                      "  )"
                      ")");
 
-	Handle Q = _eval.eval_h("(VariableNode \"$Q-496643b4\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs-3e93b595\")");
-	Handle A2 = _eval.eval_h("(VariableNode \"$A2-76df4103\")");
+	Handle Q = _eval->eval_h("(VariableNode \"$Q-496643b4\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs-3e93b595\")");
+	Handle A2 = _eval->eval_h("(VariableNode \"$A2-76df4103\")");
 
 	Handle lambda_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle take_treatment_1 =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -1608,7 +1610,7 @@ void UnifyUTest::test_unify_complex_6()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-        _eval.eval_h("(ImplicationLink"
+        _eval->eval_h("(ImplicationLink"
                      "  (AndLink"
                      "    (LambdaLink"
                      "      (TypedVariableLink"
@@ -1650,7 +1652,7 @@ void UnifyUTest::test_unify_complex_6()
                      ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(ImplicationLink"
+        _eval->eval_h("(ImplicationLink"
                      "  (AndLink"
                      "    (QuoteLink"
                      "      (LambdaLink"
@@ -1689,10 +1691,10 @@ void UnifyUTest::test_unify_complex_6()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableNode \"$Q-496643b4\")");
+        _eval->eval_h("(VariableNode \"$Q-496643b4\")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$TyVs-3e93b595\")"
                      "    (TypeChoice"
@@ -1711,18 +1713,18 @@ void UnifyUTest::test_unify_complex_6()
                      "  )"
                      ")");
 
-	Handle Q = _eval.eval_h("(VariableNode \"$Q-496643b4\")");
-	Handle TyVs = _eval.eval_h("(VariableNode \"$TyVs-3e93b595\")");
-	Handle A1 = _eval.eval_h("(VariableNode \"$A1-4fd556f2\")");
-	Handle A2 = _eval.eval_h("(VariableNode \"$A2-76df4103\")");
+	Handle Q = _eval->eval_h("(VariableNode \"$Q-496643b4\")");
+	Handle TyVs = _eval->eval_h("(VariableNode \"$TyVs-3e93b595\")");
+	Handle A1 = _eval->eval_h("(VariableNode \"$A1-4fd556f2\")");
+	Handle A2 = _eval->eval_h("(VariableNode \"$A2-76df4103\")");
 
 	Handle lambda_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\"))");
 
 	Handle take_treatment_1 =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"take\")"
 		             "  (ListLink"
 		             "    (VariableNode \"$X\")"
@@ -1763,7 +1765,7 @@ void UnifyUTest::test_unify_complex_7()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$X\")"
 		             "    (TypeNode \"ConceptNode\")"
@@ -1778,7 +1780,7 @@ void UnifyUTest::test_unify_complex_7()
 		             ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(QuoteLink"
+        _eval->eval_h("(QuoteLink"
                      "  (LambdaLink"
                      "    (UnquoteLink"
                      "      (VariableNode \"$V-6c74a409\")"
@@ -1792,7 +1794,7 @@ void UnifyUTest::test_unify_complex_7()
 	Handle vardecl;
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$V-6c74a409\")"
                      "    (TypeChoice"
@@ -1804,15 +1806,15 @@ void UnifyUTest::test_unify_complex_7()
                      "  (VariableNode \"$B-6266d6f2\")"
                      ")");
 
-	Handle V = _eval.eval_h("(VariableNode \"$V-6c74a409\")");
-	Handle B = _eval.eval_h("(VariableNode \"$B-6266d6f2\")");
+	Handle V = _eval->eval_h("(VariableNode \"$V-6c74a409\")");
+	Handle B = _eval->eval_h("(VariableNode \"$B-6266d6f2\")");
 	Handle X_vardecl =
-		_eval.eval_h("(TypedVariableLink"
+		_eval->eval_h("(TypedVariableLink"
 		             "  (VariableNode \"$X\")"
 		             "  (TypeNode \"ConceptNode\")"
 		             ")");
 	Handle body =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"contain\")"
 		             "  (ListLink"
 		             "    (ConceptNode \"treatment-1\")"
@@ -1855,7 +1857,7 @@ void UnifyUTest::test_unify_complex_8()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-		_eval.eval_h("(QuoteLink"
+		_eval->eval_h("(QuoteLink"
 		             "  (LambdaLink"
 		             "    (UnquoteLink"
 		             "      (VariableNode \"$x\")"
@@ -1867,13 +1869,13 @@ void UnifyUTest::test_unify_complex_8()
 		             ")");
 
 	Handle alpha_pat =
-		_eval.eval_h("(LambdaLink"
+		_eval->eval_h("(LambdaLink"
 		             "  (VariableNode \"$X\")"
 		             "  (VariableNode \"$X\")"
 		             ")");
 
 	Handle vardecl =
-		_eval.eval_h("(VariableList"
+		_eval->eval_h("(VariableList"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$x\")"
 		             "    (TypeNode \"VariableNode\")"
@@ -1883,9 +1885,9 @@ void UnifyUTest::test_unify_complex_8()
 
 	Handle alpha_vardecl;
 
-	Handle x_var = _eval.eval_h("(VariableNode \"$x\")");
-	Handle g_var = _eval.eval_h("(VariableNode \"$g\")");
-	Handle X = _eval.eval_h("(VariableNode \"$X\")");
+	Handle x_var = _eval->eval_h("(VariableNode \"$x\")");
+	Handle g_var = _eval->eval_h("(VariableNode \"$g\")");
+	Handle X = _eval->eval_h("(VariableNode \"$X\")");
 
 	Context C(Quotation(), {X}, true, {Variables{X}});
 	Unify::CHandle CX(X, C);
@@ -1907,7 +1909,7 @@ void UnifyUTest::test_unify_complex_9()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"minsup\")"
 		             "  (ListLink"
 		             "    (QuoteLink"
@@ -1926,7 +1928,7 @@ void UnifyUTest::test_unify_complex_9()
 		             ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(EvaluationLink"
+        _eval->eval_h("(EvaluationLink"
                      "  (PredicateNode \"minsup\")"
                      "  (ListLink"
                      "    (LambdaLink"
@@ -1939,7 +1941,7 @@ void UnifyUTest::test_unify_complex_9()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$x\")"
                      "    (TypeNode \"VariableNode\")"
@@ -1952,7 +1954,7 @@ void UnifyUTest::test_unify_complex_9()
                      ")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$texts\")"
                      "    (TypeNode \"ConceptNode\")"
@@ -1963,14 +1965,14 @@ void UnifyUTest::test_unify_complex_9()
                      "  )"
                      ")");
 
-	Handle x_var = _eval.eval_h("(VariableNode \"$x\")");
-	Handle f_var = _eval.eval_h("(VariableNode \"$f\")");
-	Handle g_var = _eval.eval_h("(VariableNode \"$g\")");
-	Handle texts_var = _eval.eval_h("(VariableNode \"$texts\")");
-	Handle ms_var = _eval.eval_h("(VariableNode \"$ms\")");
-	Handle X = _eval.eval_h("(VariableNode \"$X\")");
-	Handle texts = _eval.eval_h("(ConceptNode \"texts\")");
-	Handle ms = _eval.eval_h("(NumberNode \"2.0\")");
+	Handle x_var = _eval->eval_h("(VariableNode \"$x\")");
+	Handle f_var = _eval->eval_h("(VariableNode \"$f\")");
+	Handle g_var = _eval->eval_h("(VariableNode \"$g\")");
+	Handle texts_var = _eval->eval_h("(VariableNode \"$texts\")");
+	Handle ms_var = _eval->eval_h("(VariableNode \"$ms\")");
+	Handle X = _eval->eval_h("(VariableNode \"$X\")");
+	Handle texts = _eval->eval_h("(ConceptNode \"texts\")");
+	Handle ms = _eval->eval_h("(NumberNode \"2.0\")");
 
 	Context C(Quotation(), {X}, true, {Variables{X}});
 	Unify::CHandle CX(X, C);
@@ -1994,7 +1996,7 @@ void UnifyUTest::test_unify_complex_10()
 	logger().info("BEGIN TEST: %s", __FUNCTION__);
 
 	Handle target =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"minsup\")"
 		             "  (ListLink"
 		             "    (QuoteLink"
@@ -2014,7 +2016,7 @@ void UnifyUTest::test_unify_complex_10()
 		             ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(EvaluationLink"
+        _eval->eval_h("(EvaluationLink"
                      "  (PredicateNode \"minsup\")"
                      "  (ListLink"
                      "    (QuoteLink"
@@ -2033,10 +2035,10 @@ void UnifyUTest::test_unify_complex_10()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableNode \"$patvar\")");
+        _eval->eval_h("(VariableNode \"$patvar\")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$g\")"
                      "    (TypeChoice"
@@ -2061,17 +2063,17 @@ void UnifyUTest::test_unify_complex_10()
                      "  )"
                      ")");
 
-	Handle g_var = _eval.eval_h("(VariableNode \"$g\")");
-	Handle top = _eval.eval_h("(LambdaLink"
+	Handle g_var = _eval->eval_h("(VariableNode \"$g\")");
+	Handle top = _eval->eval_h("(LambdaLink"
 	                          "  (VariableNode \"$top-arg\")"
 	                          "  (VariableNode \"$top-arg\"))");
 	Unify::CHandle Ctop(top, Quotation(1));
-	Handle pat_var = _eval.eval_h("(VariableNode \"$patvar\")");
-	Handle f_var = _eval.eval_h("(VariableNode \"$f\")");
-	Handle texts_var = _eval.eval_h("(VariableNode \"$texts\")");
-	Handle texts = _eval.eval_h("(ConceptNode \"texts\")");
-	Handle ms_var = _eval.eval_h("(VariableNode \"$ms\")");
-	Handle ms = _eval.eval_h("(NumberNode \"2\")");
+	Handle pat_var = _eval->eval_h("(VariableNode \"$patvar\")");
+	Handle f_var = _eval->eval_h("(VariableNode \"$f\")");
+	Handle texts_var = _eval->eval_h("(VariableNode \"$texts\")");
+	Handle texts = _eval->eval_h("(ConceptNode \"texts\")");
+	Handle ms_var = _eval->eval_h("(VariableNode \"$ms\")");
+	Handle ms = _eval->eval_h("(NumberNode \"2\")");
 
 	Unify unify(target, alpha_pat, vardecl, alpha_vardecl);
 	Unify::SolutionSet result = unify(),
@@ -2085,7 +2087,7 @@ void UnifyUTest::test_unify_complex_10()
 
 	TS_ASSERT_EQUALS(result, expected);
 
-	Handle ts_vardecl = _eval.eval_h("(TypedVariableLink"
+	Handle ts_vardecl = _eval->eval_h("(TypedVariableLink"
 	                                 "  (VariableNode \"$f\")"
 	                                 "  (TypeChoice"
 	                                 "    (TypeNode \"ConceptNode\")"
@@ -2120,7 +2122,7 @@ void UnifyUTest::test_unify_complex_11()
 
 	// Hypergraph to substitute after unification
 	Handle bl =
-		_eval.eval_h("(QueryLink"
+		_eval->eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (TypedVariableLink"
 		             "      (VariableNode \"$g\")"
@@ -2213,7 +2215,7 @@ void UnifyUTest::test_unify_complex_11()
 
 	// Sub-element of bl to unify with
 	Handle target =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"minsup\")"
 		             "  (ListLink"
 		             "    (QuoteLink"
@@ -2238,7 +2240,7 @@ void UnifyUTest::test_unify_complex_11()
 		             ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(EvaluationLink"
+        _eval->eval_h("(EvaluationLink"
                      "  (PredicateNode \"minsup\")"
                      "  (ListLink"
                      "    (QuoteLink"
@@ -2260,13 +2262,13 @@ void UnifyUTest::test_unify_complex_11()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (VariableNode \"$shapat-1\")"
                      "  (VariableNode \"$shapat-0\")"
                      ")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$g\")"
                      "    (TypeChoice"
@@ -2292,16 +2294,16 @@ void UnifyUTest::test_unify_complex_11()
                      "  )"
                      ")");
 
-	Handle shapat1_var = _eval.eval_h("(VariableNode \"$shapat-1\")");
-	Handle spef_list = _eval.eval_h("(ListLink"
+	Handle shapat1_var = _eval->eval_h("(VariableNode \"$shapat-1\")");
+	Handle spef_list = _eval->eval_h("(ListLink"
 	                                "  (VariableNode \"$spe-arg-0\")"
 	                                "  (VariableNode \"$f\"))");
-	Handle ms_var = _eval.eval_h("(VariableNode \"$ms\")");
-	Handle ms = _eval.eval_h("(NumberNode \"2\")");
-	Handle texts_var = _eval.eval_h("(VariableNode \"$texts\")");
-	Handle texts = _eval.eval_h("(ConceptNode \"texts\")");
-	Handle g_var = _eval.eval_h("(VariableNode \"$g\")");
-	Handle put_top = _eval.eval_h("(PutLink"
+	Handle ms_var = _eval->eval_h("(VariableNode \"$ms\")");
+	Handle ms = _eval->eval_h("(NumberNode \"2\")");
+	Handle texts_var = _eval->eval_h("(VariableNode \"$texts\")");
+	Handle texts = _eval->eval_h("(ConceptNode \"texts\")");
+	Handle g_var = _eval->eval_h("(VariableNode \"$g\")");
+	Handle put_top = _eval->eval_h("(PutLink"
 	                              "  (LambdaLink"
 	                              "    (VariableNode \"$top-arg\")"
 	                              "    (VariableNode \"$top-arg\"))"
@@ -2323,7 +2325,7 @@ void UnifyUTest::test_unify_complex_11()
 	TS_ASSERT_EQUALS(result, expected);
 
 	// Test substitution structure construction
-	Handle ts_vardecl = _eval.eval_h("(VariableList"
+	Handle ts_vardecl = _eval->eval_h("(VariableList"
 	                                 "  (VariableNode \"$shapat-0\")"
 	                                 "  (TypedVariableLink"
 	                                 "    (VariableNode \"$f\")"
@@ -2350,7 +2352,7 @@ void UnifyUTest::test_unify_complex_11()
 	QueryLinkPtr blptr = QueryLinkCast(bl);
 	Handle sub_result = Unify::substitute(blptr, *ts_result.begin());
 	Handle sub_expected =
-		_eval.eval_h("(QueryLink"
+		_eval->eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (VariableNode \"$shapat-0\")"
 		             "    (TypedVariableLink"
@@ -2490,7 +2492,7 @@ void UnifyUTest::test_unify_complex_12()
 
 	// Hypergraph to substitute after unification
 	Handle bl =
-		_eval.eval_h("(QueryLink"
+		_eval->eval_h("(QueryLink"
 		             "  (VariableList"
 		             "    (TypedVariableLink"
 		             "      (VariableNode \"$g\")"
@@ -2580,7 +2582,7 @@ void UnifyUTest::test_unify_complex_12()
 
 	// Sub-element of bl to unify with
 	Handle target =
-		_eval.eval_h("(EvaluationLink"
+		_eval->eval_h("(EvaluationLink"
 		             "  (PredicateNode \"minsup\")"
 		             "  (ListLink"
 		             "    (QuoteLink"
@@ -2600,7 +2602,7 @@ void UnifyUTest::test_unify_complex_12()
 		             ")");
 
 	Handle alpha_pat =
-        _eval.eval_h("(EvaluationLink"
+        _eval->eval_h("(EvaluationLink"
                      "  (PredicateNode \"minsup\")"
                      "  (ListLink"
                      "    (QuoteLink"
@@ -2623,10 +2625,10 @@ void UnifyUTest::test_unify_complex_12()
                      ")");
 
 	Handle vardecl =
-        _eval.eval_h("(VariableNode \"$shapat-0\")");
+        _eval->eval_h("(VariableNode \"$shapat-0\")");
 
 	Handle alpha_vardecl =
-        _eval.eval_h("(VariableList"
+        _eval->eval_h("(VariableList"
                      "  (TypedVariableLink"
                      "    (VariableNode \"$g\")"
                      "    (TypeChoice"
@@ -2648,17 +2650,17 @@ void UnifyUTest::test_unify_complex_12()
                      "  )"
                      ")");
 
-	Handle shapat0_var = _eval.eval_h("(VariableNode \"$shapat-0\")");
-	Handle spef_list = _eval.eval_h("(ListLink"
+	Handle shapat0_var = _eval->eval_h("(VariableNode \"$shapat-0\")");
+	Handle spef_list = _eval->eval_h("(ListLink"
 	                                "  (VariableNode \"$spe-arg-0\")"
 	                                "  (VariableNode \"$spe-arg-1\")"
 	                                "  (VariableNode \"$f\"))");
-	Handle ms_var = _eval.eval_h("(VariableNode \"$ms\")");
-	Handle ms = _eval.eval_h("(NumberNode \"2\")");
-	Handle texts_var = _eval.eval_h("(VariableNode \"$texts\")");
-	Handle texts = _eval.eval_h("(ConceptNode \"texts\")");
-	Handle g_var = _eval.eval_h("(VariableNode \"$g\")");
-	Handle top = _eval.eval_h("(LambdaLink"
+	Handle ms_var = _eval->eval_h("(VariableNode \"$ms\")");
+	Handle ms = _eval->eval_h("(NumberNode \"2\")");
+	Handle texts_var = _eval->eval_h("(VariableNode \"$texts\")");
+	Handle texts = _eval->eval_h("(ConceptNode \"texts\")");
+	Handle g_var = _eval->eval_h("(VariableNode \"$g\")");
+	Handle top = _eval->eval_h("(LambdaLink"
 	                          "  (VariableNode \"$top-arg\")"
 	                          "  (VariableNode \"$top-arg\"))");
 	Unify::CHandle Ctop(top, Quotation(1));
@@ -2677,7 +2679,7 @@ void UnifyUTest::test_unify_complex_12()
 	TS_ASSERT_EQUALS(result, expected);
 
 	// Test substitution structure construction
-	Handle ts_vardecl = _eval.eval_h("(TypedVariableLink"
+	Handle ts_vardecl = _eval->eval_h("(TypedVariableLink"
 	                                 "  (VariableNode \"$f\")"
 	                                 "  (TypeNode \"LambdaLink\"))");
 
@@ -2699,7 +2701,7 @@ void UnifyUTest::test_unify_complex_12()
 	QueryLinkPtr blptr = QueryLinkCast(bl);
 	Handle sub_result = Unify::substitute(blptr, *ts_result.begin());
 	Handle sub_expected =
-		_eval.eval_h("(QueryLink"
+		_eval->eval_h("(QueryLink"
 		             "  (TypedVariableLink"
 		             "    (VariableNode \"$f\")"
 		             "    (TypeNode \"LambdaLink\")"
