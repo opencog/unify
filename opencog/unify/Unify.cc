@@ -32,10 +32,12 @@
 #include <opencog/atoms/base/Atom.h>
 #include <opencog/atoms/base/Node.h>
 #include <opencog/atoms/free/FindUtils.h>
-#include <opencog/atoms/signature/TypeUtils.h>
-#include <opencog/atoms/scope/Context.h>
-#include <opencog/atoms/scope/RewriteLink.h>
 #include <opencog/atoms/pattern/PatternUtils.h>
+#include <opencog/atoms/scope/Context.h>
+#include <opencog/atoms/scope/FilterVardecl.h>
+#include <opencog/atoms/scope/RewriteLink.h>
+#include <opencog/atoms/scope/VariableSet.h>
+#include <opencog/atoms/signature/TypeUtils.h>
 #include <opencog/atomspace/AtomSpace.h>
 
 namespace opencog {

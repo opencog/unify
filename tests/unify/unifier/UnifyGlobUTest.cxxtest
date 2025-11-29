@@ -23,7 +23,7 @@
 
 #include <opencog/util/Logger.h>
 
-#include <opencog/atoms/core/Context.h>
+#include <opencog/atoms/scope/Context.h>
 #include <opencog/unify/Unify.h>
 #include <opencog/atomspace/AtomSpace.h>
 #include <opencog/guile/SchemeEval.h>
