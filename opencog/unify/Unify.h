@@ -29,9 +29,9 @@
 #include <opencog/util/empty_string.h>
 #include <opencog/atoms/atom_types/atom_types.h>
 #include <opencog/atoms/base/Handle.h>
-#include <opencog/atoms/core/Context.h>
-#include <opencog/atoms/core/VariableList.h>
-#include <opencog/atoms/core/Variables.h>
+#include <opencog/atoms/scope/Context.h>
+#include <opencog/atoms/scope/VariableList.h>
+#include <opencog/atoms/scope/Variables.h>
 #include <opencog/atoms/pattern/QueryLink.h>
 
 namespace opencog {
