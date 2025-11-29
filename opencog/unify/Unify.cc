@@ -31,10 +31,10 @@
 #include <opencog/util/Logger.h>
 #include <opencog/atoms/base/Atom.h>
 #include <opencog/atoms/base/Node.h>
-#include <opencog/atoms/core/Context.h>
-#include <opencog/atoms/core/FindUtils.h>
-#include <opencog/atoms/core/TypeUtils.h>
-#include <opencog/atoms/core/RewriteLink.h>
+#include <opencog/atoms/free/FindUtils.h>
+#include <opencog/atoms/signature/TypeUtils.h>
+#include <opencog/atoms/scope/Context.h>
+#include <opencog/atoms/scope/RewriteLink.h>
 #include <opencog/atoms/pattern/PatternUtils.h>
 #include <opencog/atomspace/AtomSpace.h>
 
