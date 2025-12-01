@@ -22,8 +22,8 @@
  */
 
 #include <opencog/atoms/scope/LambdaLink.h>
-#include <opencog/atoms/execution/Instantiator.h>
 #include <opencog/atoms/value/LinkValue.h>
+#include <opencog/query/Instantiator.h>
 #include <opencog/unify/Unify.h>
 #include <opencog/util/exceptions.h>
 
