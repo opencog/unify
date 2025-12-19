@@ -93,14 +93,8 @@ include(OpenCogInstallOptions)
 include(Summary)
 
 # ----------------------------------------------------------
-# Needed for unit tests.
-
-FIND_PACKAGE(Cxxtest)
-IF (CXXTEST_FOUND)
-	MESSAGE(STATUS "CxxTest found.")
-ELSE (CXXTEST_FOUND)
-	MESSAGE(STATUS "CxxTest missing: needed for unit tests.")
-ENDIF (CXXTEST_FOUND)
+# Unit tests
+INCLUDE(OpenCogTestOptions)
 
 # ----------------------------------------------------------
 # This is required for Guile, Python
@@ -163,53 +157,12 @@ ENDIF(HAVE_ATOMSPACE AND HAVE_COGUTIL)
 ADD_SUBDIRECTORY(opencog)
 ADD_SUBDIRECTORY(lib)
 
-IF (CXXTEST_FOUND)
-	ENABLE_TESTING()
-	ADD_CUSTOM_TARGET(tests)
-	ADD_SUBDIRECTORY(tests EXCLUDE_FROM_ALL)
-	IF (CMAKE_BUILD_TYPE STREQUAL "Coverage")
-		# doing coverage stuff while running tests if this is the Coverage build
-		ADD_CUSTOM_TARGET(covtest
-			# TODO lcov should be found by cmake first
-			# TODO set it up so that we can pick to run coverage per test, or
-			# combined across all tests (the latter is MUCH faster). Use a define?
-			# There is coverage specific stuff in AddCxxTest.cmake now...
-			# -
-			WORKING_DIRECTORY tests
-			COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process $(ARGS)
-			COMMENT "Running tests with coverage..."
-		)
-		ADD_CUSTOM_TARGET(check
-			DEPENDS covtest
-			WORKING_DIRECTORY ./
-			# This script combines the coverage analysis of each test,
-			# then creates html in tests/lcov
-			# COMMAND genhtml -o ../lcov -t "All AtomSpace unit tests" *.info
-			COMMAND ${PROJECT_SOURCE_DIR}/scripts/combine_lcov.sh
-			COMMENT "Generating lcov report..."
-		)
-	ELSE (CMAKE_BUILD_TYPE STREQUAL "Coverage")
-		# Coverage is disabled; test normally
-		ADD_CUSTOM_TARGET(check
-			DEPENDS tests
-			WORKING_DIRECTORY tests
-			# COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process $(ARGS)
-			COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure $(ARGS)
-			COMMENT "Running tests..."
-		)
-	ENDIF (CMAKE_BUILD_TYPE STREQUAL "Coverage")
+OPENCOG_SETUP_TESTING()
 
-	ADD_CUSTOM_TARGET(test_python
-		WORKING_DIRECTORY tests/cython
-		COMMAND ${CMAKE_CTEST_COMMAND} $(ARGS)
-		COMMENT "Running Python and Cython tests..."
-	)
-	ADD_CUSTOM_TARGET(test_guile
-		WORKING_DIRECTORY tests/scm
-		COMMAND ${CMAKE_CTEST_COMMAND} $(ARGS)
-		COMMENT "Running Guile and Python-bridge tests..."
-	)
-ENDIF (CXXTEST_FOUND)
+OPENCOG_ADD_TEST_TARGET(test_python
+	tests/cython "Running Python and Cython tests...")
+OPENCOG_ADD_TEST_TARGET(test_guile
+	tests/scm "Running Guile and Python-bridge tests...")
 
 IF (NOT WIN32)
 	ADD_CUSTOM_TARGET (examples
