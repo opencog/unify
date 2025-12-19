@@ -18,7 +18,7 @@ TARGET_LINK_LIBRARIES(unify-atoms
 )
 
 INSTALL (TARGETS unify-atoms EXPORT AtomSpaceTargets
-   DESTINATION "lib${LIB_DIR_SUFFIX}/opencog"
+   DESTINATION "${CMAKE_INSTALL_LIBDIR}/opencog"
 )
 
 INSTALL (FILES

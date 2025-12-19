@@ -17,7 +17,7 @@ TARGET_LINK_LIBRARIES(unify
 
 INSTALL (TARGETS unify
     EXPORT UnifyTargets
-    DESTINATION "lib${LIB_DIR_SUFFIX}/opencog")
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/opencog")
 
 INSTALL (FILES
 	Unify.h

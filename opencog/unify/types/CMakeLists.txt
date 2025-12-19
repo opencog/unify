@@ -23,7 +23,7 @@ TARGET_LINK_LIBRARIES(unify-types
 )
 
 INSTALL (TARGETS unify-types
-	LIBRARY DESTINATION "lib${LIB_DIR_SUFFIX}/opencog"
+	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/opencog"
 )
 
 ADD_GUILE_EXTENSION(SCM_CONFIG unify-types "opencog-ext-path-unify")
