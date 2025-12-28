@@ -22,8 +22,9 @@
  */
 
 #include <opencog/atoms/scope/LambdaLink.h>
+#include <opencog/atoms/scope/QuoteReduce.h>
 #include <opencog/atoms/value/LinkValue.h>
-#include <opencog/query/Instantiator.h>
+#include <opencog/atomspace/AtomSpace.h>
 #include <opencog/unify/Unify.h>
 #include <opencog/util/exceptions.h>
 
@@ -132,7 +133,6 @@ HandleSeq UnifierLink::rewrite(AtomSpace* as, bool silent)
 	}
 
 	HandleSeq anseq;
-	Instantiator instator(as);
 	Unify::SolutionSet result = (*_unifier)();
 
 	// I don't really understand what a solution set is.
@@ -174,8 +174,12 @@ HandleSeq UnifierLink::rewrite(AtomSpace* as, bool silent)
 			}
 		}
 
-		ValuePtr vp = instator.instantiate(_outgoing[2], gndmap);
-		anseq.emplace_back(HandleCast(vp));
+		QuoteReduce qreduce(gndmap);
+		ValuePtr vp(qreduce.walk_tree(_outgoing[2]));
+		Handle h(HandleCast(vp));
+		if (h->is_executable())
+			h = HandleCast(h->execute(as));
+		anseq.emplace_back(h);
 	}
 
 	return anseq;
