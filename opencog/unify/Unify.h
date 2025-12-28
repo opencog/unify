@@ -16,20 +16,15 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program; if not, write to:
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _OPENCOG_UNIFY_UTILS_H
-#define _OPENCOG_UNIFY_UTILS_H
+#ifndef _OPENCOG_UNIFY_H
+#define _OPENCOG_UNIFY_H
 
 #include <opencog/util/empty_string.h>
 #include <opencog/atoms/atom_types/atom_types.h>
 #include <opencog/atoms/base/Handle.h>
-#include <opencog/atoms/scope/Context.h>
+#include <opencog/atoms/free/Context.h>
 #include <opencog/atoms/scope/VariableList.h>
 #include <opencog/atoms/scope/Variables.h>
 #include <opencog/atoms/pattern/QueryLink.h>
@@ -907,4 +902,4 @@ std::string oc_to_string(const Unify::TypedSubstitutions& tss,
 	
 } // namespace opencog
 
-#endif // _OPENCOG_UNIFY_UTILS_H
+#endif // _OPENCOG_UNIFY_H
