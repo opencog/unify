@@ -22,7 +22,7 @@
  */
 
 #include <opencog/atoms/scope/LambdaLink.h>
-#include <opencog/atoms/scope/QuoteReduce.h>
+#include <opencog/atoms/free/Replacement.h>
 #include <opencog/atoms/value/LinkValue.h>
 #include <opencog/atomspace/AtomSpace.h>
 #include <opencog/unify/Unify.h>
@@ -174,9 +174,7 @@ HandleSeq UnifierLink::rewrite(AtomSpace* as, bool silent)
 			}
 		}
 
-		QuoteReduce qreduce(gndmap);
-		ValuePtr vp(qreduce.walk_tree(_outgoing[2]));
-		Handle h(HandleCast(vp));
+		Handle h = Replacement::replace_nocheck(_outgoing[2], gndmap);
 		if (h->is_executable())
 			h = HandleCast(h->execute(as));
 		anseq.emplace_back(h);
